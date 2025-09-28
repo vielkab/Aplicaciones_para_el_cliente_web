@@ -24,11 +24,12 @@ body {
 }
 
 .encabezado .foto {
-    width: 120px;
-    height: 120px;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0; /* evita que se deforme */
+    margin-top: 30px;
 }
 
 .encabezado .foto img {
@@ -69,4 +70,23 @@ body {
     margin-bottom: 15px;
 }
 
-
+.referencias_personales {
+    margin: 20px;
+    background: #e5f7f0;
+    padding: 20px;
+    border-radius: 10px;
+    .tabla_referencias {
+        width: 100%;
+        border-collapse: collapse;
+        th, td {
+            border: 1px solid #03145a;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #99dbc3;
+            color: #031458;
+            font-weight: bold;
+        }
+    }
+}
