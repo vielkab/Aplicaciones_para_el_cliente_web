@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario</title>
+    <link rel="stylesheet" href="tarea3.css">
+</head>
+<body>
+    <div class="encabezado">
+        <header>
+        <h1><b>Registro de Usuario</b></h1>
+        <div class="foto">
+            <img src="formulario.png">
+        </div>
+    </header>
+    </div>
+    <div class="contenedor">
+        <form action="" id="Formulario" onsubmit="return validarformulario()">
+            <div>
+                <label for="nombre">Nombre Completo</label>
+                <input type="text" id="nombre">
+            </div>
+
+            <div>
+                <label for="cedula">Cedula</label>
+                <input type="text" id="cedula">
+            </div>
+
+            <div>
+                <label for="telefono">Telefono</label>
+                <input type="tel" id="telefono">
+            </div>
+
+            <div>
+                <label for="correo">Correo</label>
+                <input type="email" id="correo">
+            </div>
+
+            <div>
+                <label for="direccion">Direccion</label>
+                <input type="text" id="direccion">
+            </div>
+
+            <div>
+                <label>Sexo</label>
+                <div class="sexo">
+                    <label><input type="radio" name="sexo" value="Femenino"> Femenino</label>
+                    <label><input type="radio" name="sexo" value="Masculino"> Masculino</label>
+                </div>
+            </div>
+
+            <div>
+                <label for="fecha">Fecha de nacimiento:</label>
+                <input type="date" id="fecha">
+            </div>
+
+            <div>
+                <label for="usuario">Usuario</label>
+                <input type="text" id="usuario">
+            </div>
+
+            <div>
+                <label for="contrasena">Contraseña</label>
+                <input type="password" id="contrasena">
+            </div>
+
+            <button type="submit">Registrar</button>
+        </form>
+    </div>
+    <script src="tarea3.js"></script>
+</body>
+</html>
