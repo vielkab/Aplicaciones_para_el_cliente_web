@@ -48,20 +48,14 @@
     text-align: center;
 }
 
-/* Disponible = verde */
 .tarjetas .estado.libre,
 .tarjetas .estado.disponible {
     background-color: #4CAF50;
 }
 
-/* Prestado = rojo */
+
 .tarjetas .estado.prestado {
     background-color: #f44336;
-}
-
-/* Opcional: pendiente = naranja */
-.tarjetas .estado.pendiente {
-    background-color: #ff9800;
 }
 
 .col-derecha {

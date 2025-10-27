@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const librosFisicos = libros.filter(l => l.tipolibro === 'Fisico');
         catalogoFisicos.innerHTML = librosFisicos.length === 0 ? '<p>No hay libros físicos</p>' :
             librosFisicos.map(libro => {
-                // Buscamos la ÚLTIMA solicitud NO completada del usuario para este ISBN
+                // Buscar la ÚLTIMA solicitud NO completada del usuario para este ISBN
                 const solicitudesUsuario = solicitudes
                     .filter(s => s.isbn === libro.isbn && s.usuario === usuarioActual)
                     .sort((a, b) => new Date(b.fechaSolicitud) - new Date(a.fechaSolicitud));
@@ -76,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }).join('');
 
         // ---- VIRTUALES ----
-        // (El resto del código de libros virtuales se mantiene igual)
         const librosVirtuales = libros.filter(l => l.tipolibro === 'Virtual');
         catalogoVirtuales.innerHTML = librosVirtuales.length === 0 ? '<p>No hay libros virtuales</p>' :
             librosVirtuales.map(libro => `
@@ -107,7 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (confirm(`¿Desea solicitar el préstamo del libro "${libro.titulo}"?`)) {
             const solicitudes = JSON.parse(localStorage.getItem('solicitudes')) || [];
             
-            //BLOQUEO en la función: solo permite enviar la solicitud si no hay una PENDIENTE o APROBADA activa.
             const solicitudExistente = solicitudes.find(s => 
                 s.isbn === isbn && 
                 s.usuario === usuarioActual && 
@@ -142,85 +140,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     mostrarLibros();
 });
-
-// document.addEventListener('DOMContentLoaded', () => {
-//     const catalogoFisicos = document.getElementById('catalogo-fisicos');
-//     const usuarioActual = 'usuario1@example.com'; 
-
-//     function mostrar() {
-//         const libros = JSON.parse(localStorage.getItem('libros')) || [];
-//         const solicitudes = JSON.parse(localStorage.getItem('solicitudes')) || [];
-//         const librosFisicos = libros.filter(l => l.tipolibro === 'Fisico');
-
-//         catalogoFisicos.innerHTML = librosFisicos.map(libro => {
-//             const solicitud = solicitudes.find(s => s.isbn === libro.isbn && s.usuario === usuarioActual);
-//             let mensaje = '';
-
-//             if (solicitud) {
-//                 if (solicitud.estado === 'rechazada' && !solicitud.mensajeVisto) {
-//                     mensaje = `<p class="rechazo">Motivo de rechazo: ${solicitud.motivo}</p>`;
-//                     solicitud.mensajeVisto = true;
-//                     localStorage.setItem('solicitudes', JSON.stringify(solicitudes));
-//                 } else if (solicitud.estado === 'aprobada') {
-//                     mensaje = `<p class="aprobada">Solicitud aprobada. Código de retiro: ${solicitud.id.slice(-6)}</p>`;
-//                 }
-//             }
-
-//             const botonDeshabilitado = libro.estado === 'prestado' || (solicitud && solicitud.estado === 'pendiente');
-//             const textoBoton = libro.estado === 'prestado'
-//                 ? 'No Disponible'
-//                 : (solicitud && solicitud.estado === 'pendiente')
-//                     ? 'Solicitud en proceso'
-//                     : 'Solicitar Préstamo';
-
-//             return `
-//                 <div class="libro-fisico">
-//                     <img src="${libro.portada}" alt="${libro.titulo}">
-//                     <div class="info">
-//                         <h3>${libro.titulo}</h3>
-//                         <p><strong>Autor:</strong> ${libro.autor}</p>
-//                         <p><strong>ISBN:</strong> ${libro.isbn}</p>
-//                         <p><strong>Editorial:</strong> ${libro.editorial}</p>
-//                         <span class="estado ${libro.estado || 'libre'}">
-//                             ${libro.estado === 'prestado' ? 'No Disponible' : 'Disponible'}
-//                         </span>
-//                         <button onclick="gestionarPrestamo('${libro.isbn}')" ${botonDeshabilitado ? 'disabled' : ''}>
-//                             ${textoBoton}
-//                         </button>
-//                         ${mensaje}
-//                     </div>
-//                 </div>
-//             `;
-//         }).join('');
-//     }
-
-//     window.gestionarPrestamo = function(isbn) {
-//         const libros = JSON.parse(localStorage.getItem('libros')) || [];
-//         const libroIndex = libros.findIndex(l => l.isbn === isbn);
-//         if (libroIndex === -1) return;
-//         const libro = libros[libroIndex];
-
-//         const solicitudes = JSON.parse(localStorage.getItem('solicitudes')) || [];
-//         const solicitudExistente = solicitudes.find(s => s.isbn === isbn && s.usuario === usuarioActual && s.estado === 'pendiente');
-//         if (solicitudExistente) return alert('Ya tienes una solicitud pendiente para este libro.');
-
-//         if (confirm('¿Desea solicitar el préstamo de este libro?')) {
-//             const nuevaSolicitud = {
-//                 id: Date.now().toString(36),
-//                 isbn: libro.isbn,
-//                 titulo: libro.titulo,
-//                 usuario: usuarioActual,
-//                 fechaSolicitud: new Date().toISOString(),
-//                 plazoDias: 14,
-//                 estado: 'pendiente',
-//                 mensajeVisto: false
-//             };
-//             solicitudes.push(nuevaSolicitud);
-//             localStorage.setItem('solicitudes', JSON.stringify(solicitudes));
-//             alert('Solicitud enviada. El administrador la revisará.');
-//             mostrarLibrosFisicos();
-//         }
-//     }
-
-//     mostrar();
-// });

@@ -9,7 +9,7 @@
 }
 
 .lista-libros {
-    background-color: rgb(237, 241, 241); /* Fondo del contenedor de tarjetas */
+    background-color: rgb(237, 241, 241); 
     padding: 10px;
     display: flex;
     flex-direction: row;

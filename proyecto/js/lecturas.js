@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // ⚠️ Define el usuario actual aquí o recupéralo de donde lo almacenes
+    // Define el usuario actual
     const usuarioActual = 'usuario123@live.uleam.edu.ec'; 
 
     // Referencias a los contenedores
@@ -8,10 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const contenedorFavoritos = document.getElementById('favoritos');
     const filtroCategoria = document.getElementById('filtro-categoria');
     const btnRefrescar = document.getElementById('btn-refrescar');
-
-    // ----------------------------------------------------
-    // Funciones Auxiliares
-    // ----------------------------------------------------
 
     window.obtenerLibros = function() {
         // Carga los libros del almacenamiento local
@@ -29,9 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Función que genera el HTML de la tarjeta de un libro
-    // CÓDIGO CORREGIDO PARA LA FUNCIÓN generarTarjetaLibro EN lecturas.js
-
+// Función que genera el HTML de la tarjeta de un libro
 const generarTarjetaLibro = (libro) => {
     const esFavorito = libro.favorito;
 
@@ -72,33 +66,33 @@ const generarTarjetaLibro = (libro) => {
         const todosLibros = obtenerLibros().filter(l => l.tipolibro === 'Virtual');
         const categoriaSeleccionada = filtroCategoria.value;
 
-        // 1. Aplicar filtro de categoría
+        // aplicar filtro de categoría
         let librosFiltrados = todosLibros.filter(libro => 
             categoriaSeleccionada === 'todas' || libro.categoria === categoriaSeleccionada
         );
 
-        // 2. Filtrar por estado de lectura y favorito
+        // filtrar por estado de lectura y favorito
         const leyendo = librosFiltrados.filter(l => l.lectura === 'leyendo');
         const leidos = librosFiltrados.filter(l => l.lectura === 'leido');
+
         // Para Favoritos, mostramos cualquier libro marcado como favorito, sin importar el estado de lectura
         const favoritos = librosFiltrados.filter(l => l.favorito === true); 
 
-        // 3. Renderizar Leyendo
+        // mostrar Leyendo
         contenedorLeyendo.innerHTML = leyendo.length > 0
             ? leyendo.map(generarTarjetaLibro).join('')
             : '<p>Actualmente no tienes libros marcados como "Leyendo".</p>';
 
-        // 4. Renderizar Leídos
+        // mostrar Leídos
         contenedorLeidos.innerHTML = leidos.length > 0
             ? leidos.map(generarTarjetaLibro).join('')
             : '<p>Aún no has marcado libros como "Leídos".</p>';
 
-        // 5. Renderizar Favoritos
+        // mostrar Favoritos
         contenedorFavoritos.innerHTML = favoritos.length > 0
             ? favoritos.map(generarTarjetaLibro).join('')
             : '<p>Aún no tienes libros marcados como "Favoritos".</p>';
 
-        // 6. Generar las opciones del filtro al inicio (si no se han generado)
         if (filtroCategoria.options.length <= 1) {
             generarFiltroCategorias(todosLibros);
         }
@@ -115,7 +109,7 @@ const generarTarjetaLibro = (libro) => {
         }
     }
     
-    // 2. Marcar como Leído (Terminado)
+    // marcar como Leído (Terminado)
     window.marcarComoLeido = function(isbn) {
         let libros = obtenerLibros();
         const index = libros.findIndex(l => l.isbn === isbn);
@@ -128,7 +122,7 @@ const generarTarjetaLibro = (libro) => {
         }
     }
     
-    // 3. Marcar/Desmarcar Favorito
+    // marcar/desmarcar Favorito
     window.marcarFavorito = function(isbn) {
         let libros = obtenerLibros();
         const index = libros.findIndex(l => l.isbn === isbn);
@@ -142,17 +136,17 @@ const generarTarjetaLibro = (libro) => {
         }
     }
     
-    // 4. Descargar (Simulada)
+    // descargar (Simulada)
     window.descargarLibro = function(isbn) {
         alert(`Simulando descarga del libro con ISBN: ${isbn}`);
     }
 
-    // Aplicar filtro al cambiar la selección
+    // aplicar filtro al cambiar la selección
     filtroCategoria.addEventListener('change', mostrarMisLecturas);
     
-    // Botón de refrescar (útil si hay cambios externos)
+    // botón de refrescar (útil si hay cambios externos)
     btnRefrescar.addEventListener('click', mostrarMisLecturas);
 
-    // Cargar la interfaz al inicio
+
     mostrarMisLecturas();
 });

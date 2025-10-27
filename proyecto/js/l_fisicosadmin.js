@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const esPrestado = libro.estado === 'prestado';
             let botonAccion = '';
 
-            // 🔑 El botón de devolución solo aparece si el libro está prestado
+            // El botón de devolución solo aparece si el libro está prestado
             if (esPrestado) {
                 botonAccion = `<button class="devolver-libro" data-isbn="${libro.isbn}">Marcar como Disponible</button>`;
             }
@@ -52,13 +52,13 @@ document.addEventListener('DOMContentLoaded', () => {
         );
     }
 
-    // FUNCIÓN: Marcar libro como disponible (Devolución)
+    // Marcar libro como disponible (Devolución)
     function marcarComoDisponible(isbn) {
         if (!confirm('¿Confirma que el libro ha sido devuelto y desea marcarlo como Disponible?')) {
             return;
         }
 
-        // 1. Actualizar estado del libro a "disponible"
+        // Actualizar estado del libro a "disponible"
         const libros = obtenerLibros();
         const indexLibro = libros.findIndex(l => l.isbn === isbn);
         if (indexLibro !== -1) {
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('libros', JSON.stringify(libros));
         }
 
-        // 2. Actualizar la solicitud relacionada (marca la solicitud como completada)
+        // Actualizar la solicitud relacionada (marca la solicitud como completada)
         const solicitudes = obtenerSolicitudes();
         // Encuentra la solicitud que está APROBADA y corresponde a este libro
         const indexSolicitud = solicitudes.findIndex(s => s.isbn === isbn && s.estado === 'aprobada');
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const libroISBN = solicitudes[indexSolicitud].isbn;
 
-        //VERIFICACIÓN: Evitar aprobar si el libro ya está prestado 
+        //Evitar aprobar si el libro ya está prestado 
         const libros = obtenerLibros();
         const libroEncontrado = libros.find(l => l.isbn === libroISBN);
         if (libroEncontrado && libroEncontrado.estado === 'prestado') {
