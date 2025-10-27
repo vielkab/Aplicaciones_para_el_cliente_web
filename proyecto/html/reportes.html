@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REPORTES</title>
+    <link rel="stylesheet" href="../css/barrapaginas.css">
+    <link rel="stylesheet" href="../css/reportes.css">
+</head>
+<body>
+    <header>
+        <h1>Administrador</h1>
+    </header>
+    <aside class="barra">
+        <div class="contenedor">
+            <p class="logo">
+                LibroULEAM
+            </p>
+            <nav>
+                <a href="principaladmin.html">INICIO</a>
+                <a href="libros.html">GESTIÓN DE LIBROS</a>
+                <a href="l_fisicosadmin.html">LIBROS FÍSICOS</a>
+                <a href="reportes.html">REPORTES Y ESTADÍSTICAS</a>
+                <a href="ayudaadmin.html">AYUDA</a>
+            </nav>
+            <div class="cerrarsesion">
+                <a href="index.html">CERRAR SESIÓN</a>
+            </div>
+        </div>
+    </aside>
+    
+    <section id="estadisticas-resumen" class="panel">
+    <h2>Resumen General y Estadísticas</h2>
+    <button onclick="generarEstadisticasResumen()">Recalcular Estadísticas</button>
+    <div id="resumen-libros">
+        </div>
+</section>
+    <script src="../js/reportes.js" defer></script>
+</body>
+</html>

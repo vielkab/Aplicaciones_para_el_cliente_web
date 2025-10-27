@@ -1,0 +1,38 @@
+header {
+    background-color: beige;
+    text-align: center;
+    color: rgb(48, 72, 64);
+    padding: 10%;
+    font-size: 150%;
+}
+
+div {
+    margin: 10px;
+}
+
+label{
+    color: rgb(48, 72, 64);
+    font-weight: bolder;
+    font-size: large;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+button {
+    background-color: rgb(48, 72, 64);
+    color: beige;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: large;
+    margin-top: 10%;
+    margin-left: 43%;
+    border: none;
+}
+
+#resultado {
+    background: #ede7f6;
+    border-radius: 8px;
+    padding: 8px;
+    margin: 5px auto;
+    width: 300px;
+    text-align: center;
+}

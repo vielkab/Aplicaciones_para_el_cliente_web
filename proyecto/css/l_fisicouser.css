@@ -1,0 +1,82 @@
+#catalogo-fisicos {
+    margin-left: 250px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.libro-fisico {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.libro-fisico img {
+    width: 180px;
+    height: 210px;
+    padding: 15px 60px;
+    margin: 0px 5px;
+}
+
+.libro-fisico .info {
+    margin-top: 10px;
+}
+
+.libro-fisico h3 {
+    margin: 10px 0;
+    color: #333;
+}
+
+.estado {
+    padding: 5px 10px;
+    display: inline-block;
+    margin: 10px 10px;
+    font-weight: bold;
+}
+
+.estado.libre {
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 8px;
+}
+
+.estado.prestado {
+    background-color: #f44336;
+    color: white;
+    border-radius: 8px;
+}
+
+.libro-fisico button {
+    margin: 10px 10px;
+    padding: 6px 10px;
+    border: none;
+    background-color: #ba0707;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 8px;
+}
+
+.libro-fisico button:hover {
+    background-color: #8f0606;
+}
+
+.libro-fisico button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.filtro-container {
+    margin: 20px;
+}
+
+.filtro-container select {
+    padding: 8px 16px;
+    border: 2px solid #ba0707;
+    border-radius: 4px;
+    font-size: 14px;
+}

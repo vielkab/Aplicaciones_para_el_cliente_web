@@ -1,0 +1,61 @@
+header {
+    font-family: 'Times New Roman', Times, sans-serif;
+    font-weight: bolder;
+    font-size: 10px;
+    color: rgb(187, 8, 8);
+    background-color: rgb(255,255,255);
+    text-align: right;
+    padding-right: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+.barra {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20%;
+    height: 100vh;
+    background-color: #c60505;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.barra nav a {
+    color: #fcfcfc;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: block;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    margin: 10px;
+}
+
+.barra .contenedor .logo {
+    color: #fcfcfc;
+    top: 0px;
+    font-family: 'Times New Roman', Times, sans-serif;
+    font-size: 20px;
+    font-weight: bolder;
+    text-align: center;
+}
+
+.barra .contenedor .cerrarsesion {
+    padding: 10px 20px;
+    display: block;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 100px;
+}
+
+.barra .contenedor .cerrarsesion a {
+    color: #fcfcfc;
+    text-decoration: none;
+    display: block; 
+    font-weight: bolder;
+    font-size: 13px;
+}

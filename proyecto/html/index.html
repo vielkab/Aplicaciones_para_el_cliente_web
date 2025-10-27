@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INGRESO</title>
+    <link rel="stylesheet" href="../css/estilo.css">
+</head>
+<body>
+    <section class="img-portada">
+        <img src="https://media.traveler.es/photos/65030135fa748d8eb93dcd7c/16:9/w_2560%2Cc_limit/_F.-Jousseaume-3-@Yuka-Toyoshima.jpg" alt="">
+    </section>
+    <section class="registro">
+        <div class="logo">
+            <img src="https://www.uleam.edu.ec/wp-content/uploads/2012/09/LOGO-ULEAM-VERTICAL.png" alt="">
+            <h1>REGISTRO <br> LibroULEAM</h1>
+        </div>
+        <form action="" id="registros" onsubmit="return validarformulario()">
+            <div class="ingreso">
+                <div class="input">
+                    <label for="correo">CORREO</label>
+                    <input type="email" id="correo">
+                </div>
+                <div class="input">
+                    <label for="password">CONTRASEÑA</label>                    
+                    <input type="password" id="password">
+                </div>
+                <div class="boton">
+                    <button type="submit">INICIAR SESIÓN</button>
+                </div>
+                <a href="#" onclick="enviarCorreo()">¿Olvidó su contraseña?</a>
+            </div>
+        </form>
+    </section>
+
+    <script src="../js/index.js"></script>
+</body>
+</html>
+
+
+
+

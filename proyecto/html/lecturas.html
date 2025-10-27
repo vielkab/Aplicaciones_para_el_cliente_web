@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LECTURAS</title>
+    <link rel="stylesheet" href="../css/barrapaginas.css">
+    <link rel="stylesheet" href="../css/lecturas.css">
+</head>
+<body>
+    <header>
+        <h1>Usuario</h1>
+    </header>
+    <aside class="barra">
+        <div class="contenedor">
+            <p class="logo">
+                LibroULEAM
+            </p>
+            <nav>
+                <a href="principal.html">INICIO</a>
+                <a href="catalogo.html">CATÁLOGO</a>
+                <a href="lecturas.html">MIS LECTURAS</a>
+                <a href="l_fisicouser.html">LIBROS FÍSICOS</a>
+                <a href="ayuda.html">AYUDA</a>
+            </nav>
+            <div class="cerrarsesion">
+                <a href="index.html">CERRAR SESIÓN</a>
+            </div>
+        </div>
+    </aside>
+
+    <main class="lecturas-main">
+        <section class="panel-filtro">
+            <label for="filtro-categoria">Filtrar por categoría:</label>
+            <select id="filtro-categoria">
+                <option value="todas">Todas</option>
+            </select>
+            <button id="btn-refrescar">Refrescar</button>
+        </section>
+
+        <section class="contenedorsecciones">
+            <div class="col">
+                <h2>Leyendo</h2>
+                <div class="tarjetas" id="leyendo" class="lista-libros"></div>
+            </div>
+
+            <div class="col">
+                <h2>Leídos</h2>
+                <div class="tarjetas" id="leidos" class="lista-libros"></div>
+            </div>
+
+            <div class="col">
+                <h2>Favoritos</h2>
+                <div class="tarjetas" id="favoritos" class="lista-libros"></div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/lecturas.js" defer></script>
+</body>
+</html>
