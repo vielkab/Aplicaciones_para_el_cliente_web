@@ -1,0 +1,28 @@
+[
+  {
+    "isbn": "97812334567890",
+    "titulo": "Hijos de un tiempo perdido",
+    "autor": "José María Bermúdez del Castro",
+    "categoria": "Historia",
+    "editorial": "Demo Editorial",
+    "anio": "2016",
+    "tipolibro": "Virtual",
+    "portada": "https://franzabaleta.com/images/Entradas20/Portadas/Historia/Hijos_de_un_tiempo_perdido_Jos%C3%A9_Mar%C3%ADa_Berm%C3%BAdez_de_Castro.jpg",
+    "estado": "Disponible",
+    "favorito": false,
+    "lectura": "NO LEÍDO"
+  },
+  {
+    "isbn": "9780987654321",
+    "titulo": "El origen de las especies",
+    "autor": "Charles Darwin",
+    "categoria": "Ciencia",
+    "editorial": "Penguin Clásicos",
+    "anio": "1859",
+    "tipolibro": "Fisico",
+    "portada": "https://images.cdn1.buscalibre.com/fit-in/360x360/01/81/018107b71a470b6128c34ac633f7d317.jpg",
+    "estado": "Disponible",
+    "favorito": "",
+    "lectura": ""
+  }
+]
