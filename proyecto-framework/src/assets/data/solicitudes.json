@@ -1,0 +1,14 @@
+[ 
+    {
+        "id": 1,
+        "libroId": 2,
+        "usuarioId": 2,
+        "plazoDias": 7,
+        "fechaSolicitud": "2026-01-16T22:00:00",
+        "estado": "pendiente", 
+        "codigoRetiro": "", 
+        "motivo": "", 
+        "mensajeVisto": false,        
+        "fechaDevolucion": ""
+    }  
+]

@@ -1,0 +1,29 @@
+[
+    {
+        "id": 1,
+        "correo": "mariaquiroz@uleam.edu.ec",
+        "password": "admin123",
+        "rol": "administrador",
+        "nombre": "María Quiroz",
+        "calificacionPromedio": 0,
+        "totalPrestamos": 0
+    },
+    {
+        "id": 2,
+        "correo": "e1234567890@live.uleam.edu.ec",
+        "password": "estudiante1",
+        "rol": "estudiante",
+        "nombre": "Juan Navarrete",
+        "calificacionPromedio": 0,
+        "totalPrestamos": 0
+    },
+    {
+        "id": 3,
+        "correo": "miguel.carrasco@uleam.edu.ec",
+        "password": "miguel123",
+        "rol": "docente",
+        "nombre": "Miguel Carrasco",
+        "calificacionPromedio": 0,
+        "totalPrestamos": 0
+    }
+]
