@@ -1,12 +1,11 @@
 <template>
   <header class="header-usuario">
     <div class="header-content">
-      <h1>LibroULEAM</h1>
+      <p>Bienvenido</p>
       <div class="user-info">
         <div class="user-details">
           <span class="nombre">{{ usuario?.nombre }}</span>
           <span class="calificacion">⭐ {{ usuario?.calificacionPromedio?.toFixed(1) || '0.0' }}</span>
-          <span class="prestamos">({{ usuario?.totalPrestamos || 0 }} préstamos)</span>
         </div>
       </div>
     </div>
@@ -38,9 +37,10 @@ onUnmounted(() => {
 
 <style scoped>
 .header-usuario {
-  background-color: #c60505;
-  color: white;
-  padding: 15px 30px;
+  background-color: #ffffff;
+  color: rgb(168, 5, 5);
+  margin-top: 0px;
+  padding: 10px 35px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -54,9 +54,9 @@ onUnmounted(() => {
   width: 100%;
 }
 
-h1 {
+p {
   margin: 0;
-  font-size: 1.5em;
+  font-size: 1.7em;
   font-weight: bold;
 }
 
@@ -75,7 +75,7 @@ h1 {
 
 .nombre {
   font-weight: bold;
-  font-size: 1em;
+  font-size: 1.5em;
 }
 
 .calificacion {

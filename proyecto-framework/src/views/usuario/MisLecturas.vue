@@ -285,4 +285,6 @@ h2 {
   background-color: #a20404;
 }
 
+
+/* puedes subir los cabios al repositorio */
 </style>

@@ -19,6 +19,9 @@
           <p><strong>Editorial:</strong> {{ libro.editorial }}</p>
           <p><strong>Año:</strong> {{ libro.anio }}</p>
           <p><strong>Tipo de Libro:</strong> {{ libro.tipolibro }}</p>
+          <div v-if="libro.usuarioPrestamista && libro.estado === 'prestado'" class="info-prestamo-usuario">
+            <p><strong>Disponible en:</strong> {{ diasRestantes(libro.fechaDevolucionEsperada) }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -32,13 +35,44 @@ import librosJSON from '@/assets/data/libros.json'
 const libros = ref([])
 
 function cargarLibros() {
-  const almacenados = JSON.parse(localStorage.getItem('libros'))
-  if (almacenados && almacenados.length) {
-    libros.value = almacenados
-  } else {
+  try {
+    const almacenados = JSON.parse(localStorage.getItem('libros') || '[]')
+    if (almacenados && almacenados.length > 0) {
+      libros.value = almacenados
+    } else {
+      libros.value = librosJSON
+      localStorage.setItem('libros', JSON.stringify(libros.value))
+    }
+  } catch (error) {
     libros.value = librosJSON
     localStorage.setItem('libros', JSON.stringify(libros.value))
   }
+}
+
+function diasRestantes(fechaDevolucionEsperada) {
+  if (!fechaDevolucionEsperada) return '-'
+  
+  const ahora = new Date()
+  // Maneja tanto timestamps (números) como fechas ISO (strings)
+  const fechaMs = typeof fechaDevolucionEsperada === 'number' 
+    ? fechaDevolucionEsperada 
+    : new Date(fechaDevolucionEsperada).getTime()
+  
+  const diferencia = fechaMs - ahora.getTime()
+  
+  if (diferencia <= 0) return 'Vencido'
+  
+  const totalMinutos = Math.floor(diferencia / (1000 * 60))
+  const dias = Math.floor(totalMinutos / (60 * 24))
+  const horas = Math.floor((totalMinutos % (60 * 24)) / 60)
+  const minutos = totalMinutos % 60
+  
+  let resultado = ''
+  if (dias > 0) resultado += `${dias}d `
+  if (horas > 0 || dias > 0) resultado += `${horas}h `
+  resultado += `${minutos}m`
+  
+  return resultado.trim()
 }
 
 onMounted(() => {
@@ -60,6 +94,7 @@ onMounted(() => {
   text-align : left;
   color: #ba0707;
   margin-bottom: 15px;
+  font-size: 1.7em;
 }
 
 .libro {
@@ -89,7 +124,20 @@ onMounted(() => {
 }
 
 .principalvacio {
-  font-size: 23px;
+ 
+
+.info-prestamo-usuario {
+  background: #fff3cd;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 10px;
+  border-left: 3px solid #ffc107;
+}
+
+.info-prestamo-usuario p {
+  margin: 5px 0;
+  font-size: 0.9em;
+} font-size: 23px;
   font-weight: bolder;
   text-align: center;
   margin-top: 50px;

@@ -4,6 +4,7 @@ import router from './router'
 import usuarios from '@/assets/data/usuarios.json'
 import libros from '@/assets/data/libros.json'
 import solicitudes from '@/assets/data/solicitudes.json'
+import '@/assets/css/estilo.css'
 
 // 🔹 Inicializar localStorage si no existe
 if (!localStorage.getItem('usuarios')) {

@@ -20,6 +20,15 @@
                 {{ libro.estado }}
               </span>
             </p>
+            <div v-if="libro.estado === 'prestado' && libro.usuarioPrestamista" class="info-prestamo">
+              <p><b>Prestado a:</b> {{ libro.usuarioPrestamista }}</p>
+              <p><b>Código retiro:</b> {{ obtenerCodigoRetiroLibro(libro.id) }}</p>
+              <p><b>Días restantes:</b> 
+                <span :class="{ 'dias-vencido': diasRestantes(libro.fechaDevolucionEsperada) < 0, 'dias-urgente': diasRestantes(libro.fechaDevolucionEsperada) <= 3 }">
+                  {{ diasRestantes(libro.fechaDevolucionEsperada) }}
+                </span>
+              </p>
+            </div>
             <button v-if="libro.estado === 'prestado'" @click="abrirModalCalificacion(libro.id)">
               Marcar como Disponible y Calificar
             </button>
@@ -135,6 +144,11 @@ function obtenerLibro(id) {
   return libros.value.find(l => l.id === id) || { titulo: 'Desconocido', isbn: 'N/A' }
 }
 
+function obtenerCodigoRetiroLibro(libroId) {
+  const solicitud = solicitudes.value.find(s => s.libroId === libroId && s.estado === 'aprobada')
+  return solicitud ? solicitud.codigoRetiro : '-'
+}
+
 function formatearFecha(fecha) {
   return new Date(fecha).toLocaleString()
 }
@@ -143,9 +157,41 @@ function estadoClase(estado) {
   return { 'disponible': 'estado-disponible', 'prestado': 'estado-prestado' }[estado] || ''
 }
 
+function diasRestantes(fechaDevolucionEsperada) {
+  if (!fechaDevolucionEsperada) return '-'
+  
+  const ahora = new Date()
+  // Maneja tanto timestamps (números) como fechas ISO (strings)
+  const fechaMs = typeof fechaDevolucionEsperada === 'number' 
+    ? fechaDevolucionEsperada 
+    : new Date(fechaDevolucionEsperada).getTime()
+  
+  const diferencia = fechaMs - ahora.getTime()
+  
+  if (diferencia <= 0) return 'Vencido'
+  
+  const totalMinutos = Math.floor(diferencia / (1000 * 60))
+  const dias = Math.floor(totalMinutos / (60 * 24))
+  const horas = Math.floor((totalMinutos % (60 * 24)) / 60)
+  const minutos = totalMinutos % 60
+  
+  let resultado = ''
+  if (dias > 0) resultado += `${dias}d `
+  if (horas > 0 || dias > 0) resultado += `${horas}h `
+  resultado += `${minutos}m`
+  
+  return resultado.trim()
+}
+
 function aprobarSolicitud(id) {
   const s = solicitudes.value.find(s => s.id === id)
-  const libro = obtenerLibro(s.libroId)
+  const libro = libros.value.find(l => l.id === s.libroId) // Búsqueda directa en array
+  const usuario = obtenerUsuario(s.usuarioId)
+  
+  // Confirmación del admin
+  if (!confirm(`¿Confirmar préstamo de "${libro.titulo}" a ${usuario.nombre} por ${s.plazoDias} días?`)) {
+    return
+  }
   
   // Verificar que el libro no esté ya prestado
   if(libro.estado === 'prestado') {
@@ -157,8 +203,16 @@ function aprobarSolicitud(id) {
   s.estado = 'aprobada'
   s.codigoRetiro = Math.random().toString(36).substring(2,8).toUpperCase()
   
+  // Calcular fecha de devolución esperada (suma de días en milisegundos)
+  const ahora = new Date()
+  const tiempoVencimiento = ahora.getTime() + (s.plazoDias * 24 * 60 * 60 * 1000)
+  
   // Actualizar estado del libro
   libro.estado = 'prestado'
+  libro.usuarioPrestamista = usuario.nombre
+  libro.fechaDevolucionEsperada = tiempoVencimiento
+  
+  console.log('Préstamo aprobado:', { libro: libro.titulo, usuario: usuario.nombre, plazoDias: s.plazoDias, codigoRetiro: s.codigoRetiro })
   
   // Guardar inmediatamente en localStorage
   localStorage.setItem('libros', JSON.stringify(libros.value))
@@ -205,25 +259,26 @@ function abrirModalCalificacion(libroId) {
 
 // Procesar la calificación del modal
 function procesarCalificacion(calificacion) {
-  console.log('🔄 Procesando calificación:', calificacion)
-  console.log('📌 libroEnDevolucion.value:', libroEnDevolucion.value)
+  console.log('Procesando calificación:', calificacion)
+  console.log('libroEnDevolucion.value:', libroEnDevolucion.value)
   
   const libro = obtenerLibro(libroEnDevolucion.value)
-  console.log('📖 Libro encontrado:', libro)
+  console.log('Libro encontrado:', libro)
   
   const solicitud = solicitudes.value.find(s=>s.libroId===libroEnDevolucion.value && s.estado==='aprobada')
-  console.log('📋 Solicitud encontrada:', solicitud)
+  console.log('Solicitud encontrada:', solicitud)
 
   if (!libro || !solicitud) {
     alert('Error: No se encontró el libro o la solicitud')
-    console.log('❌ Error: libro o solicitud no encontrados')
     return
   }
 
   // Marcar libro como disponible
-  console.log('📝 Cambiando estado del libro a "disponible"')
+  console.log(' Cambiando estado del libro a "disponible"')
   libro.estado = 'disponible'
-  console.log('✅ Nuevo estado del libro:', libro.estado)
+  libro.usuarioPrestamista = null
+  libro.fechaDevolucionEsperada = null
+  console.log('Nuevo estado del libro:', libro.estado)
 
   // Actualizar solicitud como completada
   solicitud.estado='completada'
@@ -237,7 +292,7 @@ function procesarCalificacion(calificacion) {
   }
   
   const usuarioIndex = usuariosStorage.findIndex(u => u.id === solicitud.usuarioId)
-  console.log('👤 Usuario index:', usuarioIndex)
+  console.log('Usuario index:', usuarioIndex)
   
   if (usuarioIndex !== -1) {
     const usuario = usuariosStorage[usuarioIndex]
@@ -260,18 +315,18 @@ function procesarCalificacion(calificacion) {
       usuarioEnState.totalPrestamos = usuario.totalPrestamos
     }
     
-    console.log('✅ Usuario actualizado:', usuario)
-    console.log('📊 Nueva calificación:', usuario.calificacionPromedio.toFixed(2))
-    console.log('📈 Total préstamos:', usuario.totalPrestamos)
+    console.log('Usuario actualizado:', usuario)
+    console.log('Nueva calificación:', usuario.calificacionPromedio.toFixed(2))
+    console.log('Total préstamos:', usuario.totalPrestamos)
   }
 
   // Guardar todo en localStorage (sincronizar de forma definitiva)
-  console.log('💾 Guardando en localStorage...')
+  console.log('Guardando en localStorage...')
   localStorage.setItem('libros', JSON.stringify(libros.value))
   localStorage.setItem('solicitudes', JSON.stringify(solicitudes.value))
   localStorage.setItem('usuarios', JSON.stringify(usuariosStorage))
   
-  console.log('✔️ Datos guardados en localStorage')
+  console.log('Datos guardados en localStorage')
   
   // Recargar datos desde localStorage para asegurar sincronización perfecta
   cargarDatos()
@@ -307,6 +362,28 @@ onMounted(()=>{cargarDatos()})
 .info { flex:1 }
 .info h3 { margin: 0 0 8px 0; }
 .info p { margin: 5px 0; font-size: 0.9em; }
+.info-prestamo { 
+  background: #fff3cd; 
+  padding: 10px; 
+  border-radius: 6px; 
+  margin: 10px 0; 
+  border-left: 3px solid #ffc107;
+}
+.info-prestamo p { margin: 5px 0; font-size: 0.9em; }
+.dias-vencido { 
+  color: #d32f2f; 
+  font-weight: bold; 
+  background: #ffebee; 
+  padding: 2px 6px; 
+  border-radius: 4px;
+}
+.dias-urgente { 
+  color: #f57c00; 
+  font-weight: bold; 
+  background: #fff3e0; 
+  padding: 2px 6px; 
+  border-radius: 4px;
+}
 .info button { 
   margin-top: 8px;
   padding: 8px 12px;
@@ -322,19 +399,19 @@ onMounted(()=>{cargarDatos()})
 .estado-disponible { color:#fff; background:#4caf50; padding:2px 6px; border-radius:6px }
 .estado-prestado { color:#fff; background:#f44336; padding:2px 6px; border-radius:6px }
 
-.solicitud-card { background:#fef9e7; padding:15px; margin-bottom:15px; border-radius:8px; border-left: 4px solid #ffc107; }
+.solicitud-card { background:#f9f2f2; padding:15px; margin-bottom:15px; border-radius:8px; border-left: 4px solid #e80808; }
 .solicitud-card p { margin: 8px 0; font-size: 0.95em; }
 
 .usuario-info {
-  background: #fff;
+  background: #efe6e6;
   padding: 10px;
   border-radius: 6px;
   margin: 10px 0;
-  border-left: 3px solid #2196F3;
+  border-left: 3px solid #626864;
 }
 
 .calificacion-badge {
-  color: #ff9800;
+  color: #2b2a2a;
   font-weight: bold;
   font-size: 1em;
 }

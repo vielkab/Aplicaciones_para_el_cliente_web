@@ -26,13 +26,16 @@ import HeaderAdmin from '@/components/admin/HeaderAdmin.vue'
   margin-left: 240px;
   display: flex;
   flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .contenido {
   flex: 1;
-  padding: 30px;
+  padding: 10px 20px;
   box-sizing: border-box;
   background-color: #fff;
+  overflow-y: auto;
 }
 </style>
 

@@ -46,7 +46,7 @@
       </div>
 
       <!-- Tabla de libros leídos con conteo simulado -->
-      <h4 style="margin-top: 30px;">Libros Leídos con Conteo (Simulado)</h4>
+      <h4 style="margin-top: 30px;">Libros Leídos</h4>
       <table class="reporte-tabla">
         <thead>
           <tr>

@@ -1,7 +1,7 @@
 <template>
   <header class="header-admin">
     <div class="header-content">
-      <h1>LibroULEAM</h1>
+      <h1>Bienvenido</h1>
       <div class="user-info">
         <span class="nombre">{{ usuario?.nombre }}</span>
       </div>
@@ -23,9 +23,9 @@ onMounted(() => {
 
 <style scoped>
 .header-admin {
-  background-color: #c60505;
-  color: white;
-  padding: 15px 30px;
+  background-color: #ffffff;
+  color: rgb(199, 6, 6);
+  padding: 10px 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -41,7 +41,7 @@ onMounted(() => {
 
 h1 {
   margin: 0;
-  font-size: 1.5em;
+  font-size: 1.7em;
   font-weight: bold;
 }
 
@@ -53,7 +53,7 @@ h1 {
 
 .nombre {
   font-weight: bold;
-  font-size: 1em;
+  font-size: 1.3em;
   text-align: right;
 }
 </style>

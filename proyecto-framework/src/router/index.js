@@ -65,7 +65,7 @@ router.beforeEach((to, from, next) => {
     return
   }
 
-  if (to.path.startsWith('/admin') && usuario?.rol !== 'administrador') {
+  if (to.path.startsWith('/administrador') && usuario?.rol !== 'administrador') {
     next('/') // No admin
     return
   }

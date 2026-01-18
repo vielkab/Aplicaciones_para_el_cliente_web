@@ -5,7 +5,7 @@
         "password": "admin123",
         "rol": "administrador",
         "nombre": "María Quiroz",
-        "calificacionPromedio": 0,
+        "calificacionPromedio": 5,
         "totalPrestamos": 0
     },
     {
@@ -14,7 +14,7 @@
         "password": "estudiante1",
         "rol": "estudiante",
         "nombre": "Juan Navarrete",
-        "calificacionPromedio": 0,
+        "calificacionPromedio": 5,
         "totalPrestamos": 0
     },
     {
@@ -23,7 +23,7 @@
         "password": "miguel123",
         "rol": "docente",
         "nombre": "Miguel Carrasco",
-        "calificacionPromedio": 0,
+        "calificacionPromedio": 5,
         "totalPrestamos": 0
     }
 ]
