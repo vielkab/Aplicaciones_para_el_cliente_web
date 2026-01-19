@@ -352,4 +352,53 @@ button {
 .reporte-tabla td:nth-child(4) {
   text-align: center;
 }
+@media (max-width: 768px) {
+  .reportes-admin {
+    margin-left: 0;
+    padding: 10px;
+  }
+
+  .estadisticas {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  button {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .barra-progreso {
+    height: 24px;
+  }
+
+  .llenado-barra {
+    font-size: 13px;
+    line-height: 24px;
+    padding-right: 6px;
+  }
+
+  h2 {
+    font-size: 1.4em;
+    text-align: center;
+  }
+
+  h4 {
+    font-size: 1.1em;
+    text-align: center;
+  }
+
+  .reporte-tabla {
+    font-size: 0.85em;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .reporte-tabla th,
+  .reporte-tabla td {
+    padding: 8px;
+  }
+}
+
 </style>

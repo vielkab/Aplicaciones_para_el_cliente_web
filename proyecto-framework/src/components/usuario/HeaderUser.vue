@@ -88,4 +88,14 @@ p {
   font-size: 0.85em;
   color: #e0e0e0;
 }
+@media (max-width:600px){
+.header-usuario{flex-direction:column;align-items:flex-start;padding:10px 15px}
+.header-content{flex-direction:column;align-items:flex-start}
+p{font-size:1.3em}
+.nombre{font-size:1.2em}
+.calificacion{font-size:0.8em}
+.user-info{gap:8px}
+.user-details{align-items:flex-start}
+}
+
 </style>

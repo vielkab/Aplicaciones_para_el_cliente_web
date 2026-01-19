@@ -332,4 +332,38 @@ h2 {
 .panel-filtro button:hover {
   background-color: #a20404;
 }
+@media (max-width: 600px) {
+  .lista-libros {
+    flex-direction: column; 
+    gap: 12px;
+  }
+  .libro-tarjeta {
+    width: 100%;
+    padding: 8px;
+  }
+  .portada-contenedor {
+    height: 120px;
+  }
+  .portada-miniatura {
+    object-fit: cover;
+  }
+  .info-tarjeta h4 {
+    font-size: 1em;
+  }
+  .info-tarjeta p, .estado-lectura {
+    font-size: 0.75em;
+  }
+  .acciones-lectura button {
+    font-size: 0.75em;
+    padding: 6px;
+  }
+  .panel-filtro {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .panel-filtro select, .panel-filtro button {
+    width: 100%;
+  }
+}
 </style>

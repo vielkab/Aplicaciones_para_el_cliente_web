@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuth } from '@/composables/useAuth'
 import Login from '@/views/Login.vue'
-
 // Admin
 import AdminLayout from '@/layouts/AdminLayout.vue'
 import InicioAdmin from '@/views/admin/Inicio.vue'
@@ -9,7 +8,6 @@ import LibrosFisicosAdmin from '@/views/admin/LibrosFisicos.vue'
 import GestionLibros from '@/views/admin/GestionLibros.vue'
 import Reportes from '@/views/admin/Reportes.vue'
 import AyudaAdmin from '@/views/admin/Ayuda.vue'
-
 // Usuario
 import UsuarioLayout from '@/layouts/UsuarioLayout.vue'
 import InicioUsuario from '@/views/usuario/Inicio.vue'
@@ -17,10 +15,8 @@ import LibrosFisicosUsuario from '@/views/usuario/LibrosFisicos.vue'
 import Catalogo from '@/views/usuario/Catalogo.vue'
 import MisLecturas from '@/views/usuario/MisLecturas.vue'
 import AyudaUsuario from '@/views/usuario/Ayuda.vue'
-
 const routes = [
   { path: '/', component: Login },
-
   {
     path: '/admin',
     component: AdminLayout,
@@ -34,7 +30,6 @@ const routes = [
       { path: 'ayuda', component: AyudaAdmin }
     ]
   },
-
   {
     path: '/usuario',
     component: UsuarioLayout,

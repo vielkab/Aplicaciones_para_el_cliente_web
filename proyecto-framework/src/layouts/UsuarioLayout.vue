@@ -37,4 +37,9 @@ import HeaderUser from '@/components/usuario/HeaderUser.vue'
   background-color: #fff;
   overflow-y: auto;
 }
+@media (max-width: 768px){
+.usuario-layout{flex-direction:column}
+.main-content{margin-left:0;height:auto}
+.contenido{padding:10px;height:auto}
+}
 </style>

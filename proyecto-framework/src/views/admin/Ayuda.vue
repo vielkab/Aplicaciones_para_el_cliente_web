@@ -14,15 +14,29 @@
         font-size: 1.8em;
         color: #ba0707
     }
-
     h3 {
         padding: 10px 20px;
         text-align: center;
     }
-
     p {
         padding: 10px 60px;
         line-height: 30px;
         text-align: justify;
+    }
+    @media (max-width: 768px) {
+    h2 {
+        margin: 15px;
+        font-size: 1.5em;
+        text-align: center;
+    }
+    h3 {
+        padding: 10px;
+        font-size: 1.1em;
+    }
+    p {
+        padding: 10px 20px;
+        line-height: 24px;
+        font-size: 0.95em;
+    }
     }
 </style>

@@ -8,19 +8,14 @@
     >
       <label>Título:</label>
       <input v-model="form.titulo" required />
-
       <label>Autor:</label>
       <input v-model="form.autor" required />
-
       <label>ISBN:</label>
       <input v-model="form.isbn" :disabled="modoEdicion" required />
-
       <label>Editorial:</label>
       <input v-model="form.editorial" required />
-
       <label>Año de publicación:</label>
       <input type="date" v-model="form.anio" required />
-
       <label>Categoría:</label>
       <select v-model="form.categoria" required>
         <option value="" disabled>Seleccione</option>
@@ -30,22 +25,18 @@
         <option>Filosofía</option>
         <option>Literatura</option>
       </select>
-
       <label>URL de portada:</label>
       <input v-model="form.portada" required />
-
       <label>Tipo de libro:</label>
       <select v-model="form.tipolibro" required>
         <option value="" disabled>Seleccione</option>
         <option value="Fisico">Físico</option>
         <option value="Virtual">Virtual</option>
       </select>
-
       <div class="form-botones">
         <button type="submit" class="guardar">
           {{ modoEdicion ? 'Guardar cambios' : 'Subir libro' }}
         </button>
-
         <button type="button" class="cancelar" @click="cerrarFormulario">
           Cancelar
         </button>
@@ -55,14 +46,12 @@
       <div class="libro" v-for="(libro, index) in libros" :key="libro.isbn">
         <img :src="libro.portada" />
         <h3>{{ libro.titulo }}</h3>
-
         <p><b>Autor:</b> {{ libro.autor }}</p>
         <p><b>Categoría:</b> {{ libro.categoria }}</p>
         <p><b>ISBN:</b> {{ libro.isbn }}</p>
         <p><b>Editorial:</b> {{ libro.editorial }}</p>
         <p><b>Año:</b> {{ libro.anio }}</p>
         <p><b>Tipo Libro:</b> {{ libro.tipolibro }}</p>
-
         <div class="acciones">
           <button class="editar" @click="editarLibro(index)">Editar</button>
           <button class="eliminar" @click="confirmarEliminar(index)">
@@ -71,7 +60,6 @@
         </div>
       </div>
     </section>
-
     <!-- boton gregar libro -->
     <button
       v-if="!mostrarFormulario"
@@ -82,16 +70,13 @@
     </button>
   </section>
 </template>
-
 <script setup>
 import { ref, onMounted } from 'vue'
-
 /* estados */
 const libros = ref([])
 const mostrarFormulario = ref(false)
 const modoEdicion = ref(false)
 const indiceEditar = ref(null)
-
 /* formulario */
 const form = ref({
   titulo: '',
@@ -103,71 +88,55 @@ const form = ref({
   portada: '',
   tipolibro: ''
 })
-
 /* cargar localstorage */
 onMounted(() => {
   libros.value = JSON.parse(localStorage.getItem('libros')) || []
 })
-
 /* formulario */
 function abrirFormulario() {
   mostrarFormulario.value = true
   modoEdicion.value = false
   limpiarFormulario()
 }
-
 function cerrarFormulario() {
   mostrarFormulario.value = false
   modoEdicion.value = false
   indiceEditar.value = null
   limpiarFormulario()
 }
-
 function editarLibro(index) {
   indiceEditar.value = index
   modoEdicion.value = true
   mostrarFormulario.value = true
-
   form.value = { ...libros.value[index] }
 }
-
 function validarISBN(isbn) {
   if (!/^\d{13}$/.test(isbn)) {
     alert('El ISBN debe ser numérico y tener exactamente 13 caracteres')
     return false
   }
-
   const repetido = libros.value.some(libro => libro.isbn === isbn)
   if (repetido) {
     alert('El ISBN ya existe en el catálogo')
     return false
   }
-
   return true
 }
-
-
 function validarFecha(fecha) {
   const hoy = new Date()
   hoy.setHours(0, 0, 0, 0)
-
   const ayer = new Date(hoy)
   ayer.setDate(hoy.getDate() - 1)
-
   const fechaLibro = new Date(fecha)
-
   if (fechaLibro > ayer) {
     alert('La fecha debe ser como máximo hasta ayer')
     return false
   }
-
   return true
 }
-
 function agregarLibro() {
   if (!validarISBN(form.value.isbn)) return
   if (!validarFecha(form.value.anio)) return
-
   const nuevoLibro = {
     ...form.value,
     id: Date.now(),
@@ -179,34 +148,27 @@ function agregarLibro() {
   guardar()
   cerrarFormulario()
 }
-
 function actualizarLibro() {
   if (!validarFecha(form.value.anio)) return
-
   libros.value[indiceEditar.value] = { ...form.value }
   guardar()
   cerrarFormulario()
 }
-
 function confirmarEliminar(index) {
   const libro = libros.value[index]
-  
   // Validar que no se eliminen libros físicos prestados
   if (libro.tipolibro === 'Fisico' && libro.estado === 'prestado') {
     alert('No puedes eliminar un libro físico que está prestado. Primero debe ser devuelto.')
     return
-  }
-  
+  } 
   if (confirm('¿Estás seguro de eliminar este libro?')) {
     libros.value.splice(index, 1)
     guardar()
   }
 }
-
 function guardar() {
   localStorage.setItem('libros', JSON.stringify(libros.value))
 }
-
 function limpiarFormulario() {
   form.value = {
     titulo: '',
@@ -220,24 +182,19 @@ function limpiarFormulario() {
   }
 }
 </script>
-
 <style scoped>
 h2 {
   color: #ba0707;
   font-size: 1.7em;
 }
-
 .gestion-libros {
   padding: 20px;
 }
-
-
 #catalogo {
   display: flex;
   flex-wrap: wrap;
   margin-top: 20px;
 }
-
 .libro {
   width: 230px;
   min-height: 560px;
@@ -250,13 +207,11 @@ h2 {
   flex-direction: column;
   text-align: center;
 }
-
 .libro p {
   margin: 2px 0;  
   line-height: 2;    
   font-size: 15px;
 }
-
 .libro img {
   display: block;
   margin: 0 auto;
@@ -264,14 +219,12 @@ h2 {
   height: 220px;
   object-fit: cover;
 }
-
 .acciones {
   margin-top: auto;
   display: flex;
   justify-content: center;
   gap: 10px;
 }
-
 .acciones button {
   padding: 6px 12px;
   font-size: 12px;
@@ -280,29 +233,24 @@ h2 {
   border-radius: 4px;
   cursor: pointer;
 }
-
 .editar {
   background-color: #72716f;
   color: white;
 }
-
 .eliminar {
   background-color: #72716f;
   color: white;
 }
-
 .formulario {
   max-width: 450px;
   display: flex;
   flex-direction: column;
 }
-
 .formulario label {
   margin-top: 10px;
   font-weight: bold;
   font-size: 14px;
 }
-
 .formulario input,
 .formulario select {
   border: none;
@@ -311,19 +259,15 @@ h2 {
   font-size: 14px;
   outline: none;
 }
-
 .formulario input:focus,
 .formulario select:focus {
   border-bottom: 2px solid #c60505;
 }
-
-
 .form-botones {
   display: flex;
   justify-content: space-between;
   margin-top: 15px;
 }
-
 .guardar {
   background-color: #c60505;
   color: white;
@@ -331,7 +275,6 @@ h2 {
   padding: 8px 14px;
   font-weight: bold;
 }
-
 .cancelar {
   background-color: #777;
   color: white;
@@ -339,7 +282,6 @@ h2 {
   padding: 8px 14px;
   font-weight: bold;
 }
-
 .btn-flotante {
   position: fixed;
   bottom: 20px;
@@ -352,5 +294,41 @@ h2 {
   border-radius: 50%;
   border: none;
   cursor: pointer;
+}
+@media (max-width: 768px) {
+  .gestion-libros {
+    padding: 10px;
+  }
+  h2 {
+    text-align: center;
+    font-size: 1.4em;
+  }
+  #catalogo {
+    justify-content: center;
+  }
+  .libro {
+    width: 90%;
+    min-height: auto;
+  }
+  .libro img {
+    width: 160px;
+    height: 180px;
+  }
+  .formulario {
+    max-width: 100%;
+  }
+  .form-botones {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .guardar,
+  .cancelar {
+    width: 100%;
+  }
+  .btn-flotante {
+    width: 50px;
+    height: 50px;
+    font-size: 26px;
+  }
 }
 </style>

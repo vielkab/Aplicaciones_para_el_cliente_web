@@ -145,17 +145,14 @@ h3 {
   transition: all 0.2s ease;
   user-select: none;
 }
-
 .estrella:hover,
 .estrella.hover {
   transform: scale(1.2);
   color: #ffc107;
 }
-
 .estrella.activa {
   color: #ffc107;
 }
-
 .preview-calificacion {
   text-align: center;
   color: #666;
@@ -163,13 +160,11 @@ h3 {
   margin-bottom: 20px;
   min-height: 20px;
 }
-
 .botones {
   display: flex;
   gap: 10px;
   justify-content: center;
 }
-
 .btn-confirmar,
 .btn-cancelar {
   padding: 10px 20px;
@@ -179,23 +174,28 @@ h3 {
   font-weight: bold;
   transition: all 0.3s ease;
 }
-
 .btn-confirmar {
   background: #4caf50;
   color: white;
 }
-
 .btn-confirmar:hover {
   background: #45a049;
   transform: translateY(-2px);
 }
-
 .btn-cancelar {
   background: #f0f0f0;
   color: #333;
 }
-
 .btn-cancelar:hover {
   background: #e0e0e0;
+}
+@media (max-width:600px){
+.modal-contenedor{padding:20px;width:95%}
+h3{font-size:1.1em}
+.calificacion-info{font-size:0.85em;padding:10px}
+.estrellas-container{gap:10px}
+.estrella{font-size:2.5em}
+.botones{flex-direction:column;gap:8px}
+.btn-confirmar,.btn-cancelar{padding:8px 15px;font-size:0.9em}
 }
 </style>

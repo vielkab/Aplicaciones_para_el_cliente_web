@@ -108,18 +108,6 @@ function cargarDatos() {
   solicitudesPendientes.value = solicitudes.value.filter(s => s.estado === 'pendiente')
 }
 
-/*function resetearDatos() {
-  if (confirm(' Esto borrará TODOS los datos del localStorage. ¿Estás seguro?')) {
-    localStorage.removeItem('libros')
-    localStorage.removeItem('usuarios')
-    localStorage.removeItem('solicitudes')
-    console.log('Todos los datos de localStorage han sido eliminados')
-    alert('Datos eliminados. Recarga la página para que aparezcan los datos iniciales.')
-  }
-}*/
-
-
-
 function obtenerUsuario(id) {
   let almacenados = JSON.parse(localStorage.getItem('usuarios'))
   
@@ -447,4 +435,35 @@ h2 {
 .btn-rechazar:hover {
   background: #da190b;
 }
+@media (max-width: 768px) {
+  .contenedor-fisicos {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .tarjetas {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .libro-fisico img {
+    width: 140px;
+    height: 190px;
+  }
+
+  .info {
+    width: 100%;
+  }
+
+  .acciones-solicitud {
+    flex-direction: column;
+  }
+
+  .btn-aprobar,
+  .btn-rechazar {
+    width: 100%;
+  }
+}
+
 </style>

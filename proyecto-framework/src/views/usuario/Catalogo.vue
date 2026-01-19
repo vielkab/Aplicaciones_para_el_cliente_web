@@ -1,7 +1,6 @@
 <template>
   <section id="catalogo">
     <h1>Catálogo de Libros</h1>
-
     <div v-if="libros.length === 0" class="principalvacio">
       No hay libros registrados aún
     </div>
@@ -27,7 +26,6 @@
     </div>
   </section>
 </template>
-
 <script setup>
 import { ref, onMounted } from 'vue'
 import librosJSON from '@/assets/data/libros.json'
@@ -48,7 +46,6 @@ function cargarLibros() {
     localStorage.setItem('libros', JSON.stringify(libros.value))
   }
 }
-
 function diasRestantes(fechaDevolucionEsperada) {
   if (!fechaDevolucionEsperada) return '-'
   
@@ -73,7 +70,6 @@ function diasRestantes(fechaDevolucionEsperada) {
   
   return resultado.trim()
 }
-
 onMounted(() => {
   cargarLibros()
 })
@@ -88,14 +84,12 @@ onMounted(() => {
   flex-direction: column; 
   gap: 20px;
 }
-
 #catalogo h1 {
   text-align : left;
   color: #ba0707;
   margin-bottom: 15px;
   font-size: 1.7em;
 }
-
 .libro {
   display: flex;
   flex-direction: row;
@@ -106,14 +100,12 @@ onMounted(() => {
   align-items: flex-start;
   margin-bottom: 40px;
 }
-
 .imagen img {
   width: 200px;
   height: 280px;
   object-fit: cover;
   border-radius: 4px;
 }
-
 .infoimagen {
   display: flex;
   flex-direction: column;
@@ -121,10 +113,7 @@ onMounted(() => {
   line-height: 3px;
   margin-left: 40px;
 }
-
 .principalvacio {
- 
-
 .info-prestamo-usuario {
   background: #fff3cd;
   padding: 10px;
@@ -132,7 +121,6 @@ onMounted(() => {
   margin-top: 10px;
   border-left: 3px solid #ffc107;
 }
-
 .info-prestamo-usuario p {
   margin: 5px 0;
   font-size: 0.9em;
@@ -140,5 +128,43 @@ onMounted(() => {
   font-weight: bolder;
   text-align: center;
   margin-top: 50px;
+}
+@media (max-width: 768px) {
+  #catalogo {
+    width: 95vw;
+    margin: 10px auto;
+    gap: 15px;
+  }
+  #catalogo h1 {
+    font-size: 1.4em;
+    text-align: center;
+  }
+  .libro {
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+    gap: 15px;
+  }
+  .imagen img {
+    width: 160px;
+    height: 220px;
+  }
+  .infoimagen {
+    margin-left: 0;
+    align-items: center;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .infoimagen p {
+    font-size: 0.95em;
+  }
+  .info-prestamo-usuario {
+    width: 100%;
+    text-align: center;
+  }
+  .principalvacio {
+    font-size: 1.2em;
+    margin-top: 30px;
+  }
 }
 </style>

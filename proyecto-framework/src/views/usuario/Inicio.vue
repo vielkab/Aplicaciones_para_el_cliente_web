@@ -240,5 +240,50 @@ onMounted(() => {
   margin: 5px 0;
   font-size: 0.85em;
 }
+@media (max-width: 768px) {
+  #catalogo {
+    width: 95vw;
+    margin: 0 auto;
+  }
+  #catalogo h2 {
+    font-size: 1.3em;
+    margin: 15px 0;
+    text-align: center;
+  }
+  .contenedor-libros {
+    justify-content: center;
+  }
+  #catalogo .libro {
+    width: 170px;
+    height: auto;
+    padding: 10px;
+    margin: 8px;
+  }
+  #catalogo img {
+    width: 100px;
+    height: 130px;
+    padding: 5px;
+  }
+  .infoimagen h3 {
+    font-size: 1em;
+  }
+  .infoimagen p {
+    font-size: 0.85em;
+  }
+  .botonlibro {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 5px;
+  }
+  .botonlibro button {
+    font-size: 0.8em;
+    padding: 6px;
+  }
+  .info-prestamo-usuario {
+    font-size: 0.8em;
+    text-align: center;
+  }
+}
 </style>
 

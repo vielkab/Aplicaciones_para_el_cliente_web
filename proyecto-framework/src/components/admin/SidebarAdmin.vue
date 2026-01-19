@@ -82,7 +82,6 @@ nav a:hover,
 nav a.router-link-active {
   background-color: rgba(255,255,255,0.2);
 }
-
 .cerrarsesion {
   background: none;
   margin-top: 100px;
@@ -92,15 +91,11 @@ nav a.router-link-active {
   font-weight: bold;
   cursor: pointer;
 }
-@media (max-width: 1024px) {
-  .barra {
-    width: 200px;
-  }
-
-  .main {
-    margin-left: 200px;
-  }
+@media (max-width:768px){
+.barra{width:100%;height:auto;position:relative;padding:15px 0}
+.contenedor{align-items:flex-start}
+nav a{padding:10px 0;font-size:14px;text-align:left}
+.cerrarsesion{margin-top:20px;font-size:14px}
 }
-
 </style>
 

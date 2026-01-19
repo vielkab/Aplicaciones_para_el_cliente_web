@@ -394,7 +394,29 @@ button:hover {
 select {
   margin-top: 5px;
 }
-
+@media (max-width: 600px) {
+  .tarjetas {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .libro-card {
+    width: 100%;
+    padding: 10px;
+  }
+  .info {
+    font-size: 1em;
+  }
+  .info p {
+    font-size: 0.75em;
+  }
+  select, button {
+    font-size: 0.75em;
+    padding: 6px;
+  }
+  .tiempo-restante {
+    font-size: 0.8em;
+  }
+}
 </style>
 
 

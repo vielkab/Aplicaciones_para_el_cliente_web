@@ -95,4 +95,31 @@ onMounted(() => {
   font-weight: bolder;
   margin-top: 40px;
 }
+@media (max-width: 768px) {
+  #catalogo {
+    padding: 10px;
+  }
+
+  .libro {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .imagen img {
+    width: 150px;
+    height: 200px;
+    padding: 10px;
+  }
+
+  .infoimagen {
+    margin-left: 0;
+  }
+
+  .principalvacio {
+    font-size: 18px;
+    text-align: center;
+  }
+}
+
 </style>

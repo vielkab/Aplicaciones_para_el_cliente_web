@@ -4,7 +4,6 @@
             <div class="logo">
                 <h2>LibroULEAM</h2>
             </div>
-
             <nav>
                 <router-link to="/usuario/inicio">Inicio</router-link>
                 <router-link to="/usuario/catalogo">Catálogo</router-link>
@@ -19,7 +18,6 @@
         </div>
     </aside>
 </template>
-
 <script setup>
     import { useRouter } from 'vue-router'
     import { useAuth } from '@/composables/useAuth'
@@ -32,7 +30,6 @@
     router.replace('/')
     }
 </script>
-
 <style scoped>
 .barra {
   position: fixed;
@@ -45,14 +42,12 @@
   justify-content: space-between;
   padding: 30px 0;
 }
-
 .contenedor {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
 .logo {
   color: #fff;
   font-family: 'Times New Roman', Times, sans-serif;
@@ -61,11 +56,9 @@
   text-align: center;
   margin-bottom: 40px;
 }
-
 nav {
   width: 100%;
 }
-
 nav a {
   display: block;
   width: 100%;
@@ -77,12 +70,10 @@ nav a {
   text-align: center;
   transition: background 0.3s;
 }
-
 nav a:hover,
 nav a.router-link-active {
   background-color: rgba(255,255,255,0.2);
 }
-
 .cerrarsesion {
   background: none;
   margin-top: 100px;
@@ -101,6 +92,10 @@ nav a.router-link-active {
     margin-left: 200px;
   }
 }
-
+@media (max-width:768px){
+.barra{width:100%;height:auto;position:relative;padding:15px 0}
+.contenedor{align-items:flex-start}
+nav a{padding:10px 0;font-size:14px;text-align:left}
+.cerrarsesion{margin-top:20px;font-size:14px}
+}
 </style>
-

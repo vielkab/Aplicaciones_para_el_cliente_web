@@ -25,4 +25,22 @@
         line-height: 30px;
         text-align: justify;
     }
+    @media (max-width: 768px) {
+    h2 {
+        font-size: 1.4em;
+        margin: 15px;
+        text-align: center;
+    }
+
+    h3 {
+        font-size: 1.1em;
+        padding: 10px;
+    }
+
+    p {
+        padding: 10px 20px;
+        line-height: 24px;
+        font-size: 0.95em;
+    }
+    }
 </style>

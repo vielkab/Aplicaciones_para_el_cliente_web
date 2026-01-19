@@ -37,5 +37,18 @@ import HeaderAdmin from '@/components/admin/HeaderAdmin.vue'
   background-color: #fff;
   overflow-y: auto;
 }
+@media (max-width: 768px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+  .main-content {
+    margin-left: 0;
+    height: auto; 
+  }
+  .contenido {
+    padding: 10px;
+    height: auto;
+  }
+}
 </style>
 
