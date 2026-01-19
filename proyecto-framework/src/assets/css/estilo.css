@@ -1,4 +1,4 @@
-/* 🔥 RESET TOTAL DEL LAYOUT */
+/*reset del layout*/
 html,
 body,
 #app {
@@ -8,7 +8,6 @@ body,
   width: 100%;
 }
 
-/* 🔥 elimina márgenes por defecto */
 body {
   overflow: auto;
 }

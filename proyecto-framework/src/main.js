@@ -8,7 +8,12 @@ import '@/assets/css/estilo.css'
 
 // 🔹 Inicializar localStorage si no existe
 if (!localStorage.getItem('usuarios')) {
-  localStorage.setItem('usuarios', JSON.stringify(usuarios))
+  // Inicializar cada usuario con su propio estado de libros
+  const usuariosConEstado = usuarios.map(usuario => ({
+    ...usuario,
+    librosEstado: {} // { isbn: { favorito: bool, lectura: string } }
+  }))
+  localStorage.setItem('usuarios', JSON.stringify(usuariosConEstado))
 }
 if (!localStorage.getItem('libros')) {
   localStorage.setItem('libros', JSON.stringify(libros))

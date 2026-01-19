@@ -53,7 +53,6 @@ function diasRestantes(fechaDevolucionEsperada) {
   if (!fechaDevolucionEsperada) return '-'
   
   const ahora = new Date()
-  // Maneja tanto timestamps (números) como fechas ISO (strings)
   const fechaMs = typeof fechaDevolucionEsperada === 'number' 
     ? fechaDevolucionEsperada 
     : new Date(fechaDevolucionEsperada).getTime()

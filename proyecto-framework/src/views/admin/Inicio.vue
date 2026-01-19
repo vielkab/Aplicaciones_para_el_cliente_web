@@ -1,11 +1,8 @@
 <template>
   <section id="catalogo">
-    <!-- Si no hay libros -->
     <p v-if="libros.length === 0" class="principalvacio">
       No hay libros registrados aún
     </p>
-
-    <!-- Mostrar libros -->
     <div v-for="libro in libros" :key="libro.isbn" class="libro">
       <div class="imagen">
         <img :src="libro.portada" :alt="libro.titulo" />
@@ -31,13 +28,13 @@ import librosJSON from '@/assets/data/libros.json'
 const libros = ref([])
 
 onMounted(() => {
-  // 1️⃣ Intentar cargar desde localStorage
+  //Intentar cargar desde localStorage
   const guardados = localStorage.getItem('libros')
 
   if (guardados) {
     libros.value = JSON.parse(guardados)
   } else {
-    // 2️⃣ Si no hay, usar JSON inicial
+    //Si no hay, usar JSON inicial
     libros.value = librosJSON
     localStorage.setItem('libros', JSON.stringify(librosJSON))
   }
@@ -52,7 +49,6 @@ onMounted(() => {
   flex-direction: column;
 }
 
-/* Libro */
 .libro {
   background: beige;
   border-radius: 8px;
@@ -62,19 +58,16 @@ onMounted(() => {
   position: relative;
 }
 
-/* Imagen */
 .imagen img {
   width: 190px;
   height: 250px;
   padding: 15px;
 }
 
-/* Info */
 .infoimagen {
   margin-left: 20px;
 }
 
-/* Botones */
 .botonlibro {
   position: absolute;
   right: 30px;
@@ -97,7 +90,6 @@ onMounted(() => {
   background-color: rgb(159, 6, 6);
 }
 
-/* Vacío */
 .principalvacio {
   font-size: 23px;
   font-weight: bolder;

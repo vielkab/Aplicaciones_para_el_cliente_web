@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container">
+  <div class="contenedor-login">
     <section class="portada">
       <img
         src=https://media.traveler.es/photos/65030135fa748d8eb93dcd7c/16:9/w_2560%2Cc_limit/_F.-Jousseaume-3-@Yuka-Toyoshima.jpg
@@ -18,24 +18,21 @@
 
       <form @submit.prevent="validarFormulario">
         <div class="ingreso">
-          <!-- CORREO -->
           <div class="input">
             <label>CORREO</label>
             <input type="email" v-model="correo" />
           </div>
-
-          <!-- CONTRASEÑA -->
           <div class="input">
             <label>CONTRASEÑA</label>
 
-            <div class="password-wrapper">
+            <div class="contrasena">
               <input
                 :type="mostrarPassword ? 'text' : 'password'"
                 v-model="password"
               />
 
-              <span class="eye" @click="togglePassword">
-                <!-- OJO CERRADO -->
+              <span class="ojo" @click="togglePassword">
+                <!-- ojo cerrado -->
                 <svg
                   v-if="!mostrarPassword"
                   xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +43,7 @@
                   />
                 </svg>
 
-                <!-- OJO ABIERTO -->
+                <!-- ojo abierto -->
                 <svg
                   v-else
                   xmlns="http://www.w3.org/2000/svg"
@@ -60,8 +57,6 @@
             </div>
           </div>
           <p v-if="error" class="error">{{ error }}</p>
-
-          <!-- BOTÓN -->
           <div class="boton">
             <button type="submit">INICIAR SESIÓN</button>
           </div>
@@ -82,12 +77,10 @@ import { useAuth } from '@/composables/useAuth'
 
 const { login } = useAuth()
 const router = useRouter()
-
 const correo = ref('')
 const password = ref('')
 const mostrarPassword = ref(false)
 const error = ref('')
-
 function togglePassword() {
   mostrarPassword.value = !mostrarPassword.value
 }
@@ -123,7 +116,7 @@ function recuperarContrasena() {
 </script>
 
 <style scoped>
-.login-container {
+.contenedor-login {
   width: 99vw;
   height: 97vh;
   display: flex;
@@ -193,11 +186,11 @@ function recuperarContrasena() {
 }
 
 
-.password-wrapper {
+.contrasena {
   position: relative;
 }
 
-.eye {
+.ojo {
   position: absolute;
   right: 0;
   top: 50%;
@@ -205,7 +198,7 @@ function recuperarContrasena() {
   cursor: pointer;
 }
 
-.eye svg {
+.ojo svg {
   width: 18px;
   height: 18px;
   fill: #333;

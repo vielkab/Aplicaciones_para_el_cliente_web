@@ -56,27 +56,26 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  // 🔹 Primero revisamos si hay usuario en el router state (después localStorage)
   const usuario =
     history.state?.usuario || JSON.parse(localStorage.getItem('usuarioActivo'))
 
   if (to.meta.requiereAuth && !usuario) {
-    next('/') // No logueado
+    next('/')
     return
   }
 
   if (to.path.startsWith('/administrador') && usuario?.rol !== 'administrador') {
-    next('/') // No admin
+    next('/')
     return
   }
 
   if (to.path.startsWith('/usuario') && usuario?.rol === 'administrador') {
-    next('/admin/inicio') // Admin no puede ir a usuario
+    next('/admin/inicio')
     return
   }
 
   if (to.path.startsWith('/usuario') && !usuario?.rol) {
-    next('/') // Usuario sin rol definido
+    next('/')
     return
   }
 

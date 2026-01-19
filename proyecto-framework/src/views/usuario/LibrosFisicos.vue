@@ -2,7 +2,7 @@
   <section class="libros-fisicos-user">
     <h2>Libros Físicos</h2>
 
-    <!-- Libros que tiene prestados -->
+    <!-- Libros prestados -->
     <div v-if="librosPrestados.length > 0" class="seccion-prestados">
       <h3>Mis Préstamos Activos</h3>
       <div class="tarjetas">
@@ -63,7 +63,6 @@ import { useAuth } from '@/composables/useAuth'
 
 const { getUsuario } = useAuth()
 
-// Usuario actual obtenido desde Auth
 const usuarioActual = ref(getUsuario() || { id: 2, correo: 'e1234567890@live.uleam.edu.ec' })
 
 const libros = ref([])
@@ -72,11 +71,18 @@ const diasSeleccionados = ref({})
 
 // Computed para libros prestados y disponibles
 const librosPrestados = computed(() => {
-  return libros.value.filter(l => 
-    l.tipolibro === 'Fisico' && 
-    l.estado === 'prestado' && 
-    l.usuarioPrestamista
-  )
+  return libros.value.filter(l => {
+    // Buscar la solicitud aprobada para este libro
+    const solicitud = solicitudes.value.find(s => 
+      s.libroId === l.id && 
+      s.estado === 'aprobada'
+    )
+    // Solo mostrar si el usuario actual es quien tiene el préstamo
+    return l.tipolibro === 'Fisico' && 
+           l.estado === 'prestado' && 
+           solicitud &&
+           solicitud.usuarioId === usuarioActual.value.id
+  })
 })
 
 const librosDisponibles = computed(() => {
@@ -88,19 +94,18 @@ const librosDisponibles = computed(() => {
 
 // Cargar datos de localStorage
 function cargarDatos() {
-  usuarioActual.value = getUsuario() // Recarga el usuario actualizado
+  usuarioActual.value = getUsuario()
   libros.value = JSON.parse(localStorage.getItem('libros')) || []
   solicitudes.value = JSON.parse(localStorage.getItem('solicitudes')) || []
   
   verificarRechazos()
 }
 
-// Función para calcular días y horas restantes
+// Función para calcular días y horas restantes del prestamo
 function diasRestantes(fechaDevolucionEsperada) {
   if (!fechaDevolucionEsperada) return '-'
   
   const ahora = new Date()
-  // Maneja tanto timestamps (números) como fechas ISO (strings)
   const fechaMs = typeof fechaDevolucionEsperada === 'number' 
     ? fechaDevolucionEsperada 
     : new Date(fechaDevolucionEsperada).getTime()
@@ -122,7 +127,7 @@ function diasRestantes(fechaDevolucionEsperada) {
   return resultado.trim()
 }
 
-// 🔹 NUEVA FUNCIÓN: Verificar y mostrar rechazos pendientes
+//Verificar y mostrar rechazos pendientes
 function verificarRechazos() {
   const rechazosNoVistos = solicitudes.value.filter(
     s => s.libroId && 
@@ -134,7 +139,7 @@ function verificarRechazos() {
   rechazosNoVistos.forEach(rechazo => {
     const libro = libros.value.find(l => l.id === rechazo.libroId)
     if (libro) {
-      alert(`❌ Tu solicitud para "${libro.titulo}" fue rechazada.\n\nMotivo: ${rechazo.motivo}`)
+      alert(`Tu solicitud para "${libro.titulo}" fue rechazada.\n\nMotivo: ${rechazo.motivo}`)
       // Marcar como visto
       rechazo.mensajeVisto = true
       guardarDatos()
@@ -142,7 +147,6 @@ function verificarRechazos() {
   })
 }
 
-// Helpers
 function estadoClase(estado) {
   return {
     'disponible': 'estado-disponible',
@@ -173,7 +177,7 @@ function solicitarPrestamo(libroId) {
   if (!libro || libro.estado !== 'disponible') return
 
   const dias = diasSeleccionados.value[libroId] || 7
-  const idSolicitud = Date.now() // id único
+  const idSolicitud = Date.now()
   solicitudes.value.push({
     id: idSolicitud,
     libroId,
@@ -200,7 +204,7 @@ function guardarDatos() {
 // Inicializar
 onMounted(() => {
   cargarDatos()
-  // Actualizar datos cada 2 segundos para reflejar cambios en tiempo real
+  // se actualizan datos cada 2 segundos para reflejar cambios en tiempo real
   setInterval(() => {
     cargarDatos()
   }, 2000)
@@ -210,7 +214,7 @@ onMounted(() => {
 <style scoped>
 h2 {
   font-size: 1.7em;
-  color: #ba0707;
+  color: #ba0707;;
 }
 
 h3 {
@@ -224,11 +228,11 @@ h3 {
 }
 
 .seccion-prestados {
-  background: #f5f5f5;
-  padding: 15px;
+  background: #f7f2f2;
+  padding: 1px 15px;
   border-radius: 8px;
   margin-bottom: 30px;
-  border-left: 4px solid #ffc107;
+  border-left: 4px solid #c40909;
 }
 
 .tarjetas {
@@ -254,7 +258,7 @@ h3 {
 
 .libro-card.prestado {
   background: #fff9e6;
-  border-left: 3px solid #ffc107;
+  border-left: 3px solid #5f5e5a;
 }
 
 .libro-card img {
@@ -266,7 +270,7 @@ h3 {
 }
 
 .info {
-  font-size: 0.85em;
+  font-size: 1.2em;
 }
 
 .info h3 {
@@ -281,7 +285,7 @@ h3 {
 }
 
 .tiempo-restante {
-  color: #f57c00;
+  color: #d27d28;
   font-weight: bold;
   background: #fff3e0;
   padding: 5px;

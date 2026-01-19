@@ -1,8 +1,6 @@
 <template>
   <section class="gestion-libros">
     <h2>Gestión de Libros</h2>
-
-    <!-- FORMULARIO -->
     <form
       v-if="mostrarFormulario"
       class="formulario"
@@ -53,8 +51,6 @@
         </button>
       </div>
     </form>
-
-    <!-- CATÁLOGO -->
     <section id="catalogo" v-else>
       <div class="libro" v-for="(libro, index) in libros" :key="libro.isbn">
         <img :src="libro.portada" />
@@ -76,7 +72,7 @@
       </div>
     </section>
 
-    <!-- BOTÓN FLOTANTE -->
+    <!-- boton gregar libro -->
     <button
       v-if="!mostrarFormulario"
       class="btn-flotante"
@@ -90,13 +86,13 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
-/* ESTADO */
+/* estados */
 const libros = ref([])
 const mostrarFormulario = ref(false)
 const modoEdicion = ref(false)
 const indiceEditar = ref(null)
 
-/* FORMULARIO */
+/* formulario */
 const form = ref({
   titulo: '',
   autor: '',
@@ -108,12 +104,12 @@ const form = ref({
   tipolibro: ''
 })
 
-/* CARGAR LOCALSTORAGE */
+/* cargar localstorage */
 onMounted(() => {
   libros.value = JSON.parse(localStorage.getItem('libros')) || []
 })
 
-/* FORMULARIO */
+/* formulario */
 function abrirFormulario() {
   mostrarFormulario.value = true
   modoEdicion.value = false
@@ -172,7 +168,14 @@ function agregarLibro() {
   if (!validarISBN(form.value.isbn)) return
   if (!validarFecha(form.value.anio)) return
 
-  libros.value.push({ ...form.value })
+  const nuevoLibro = {
+    ...form.value,
+    id: Date.now(),
+    estado: 'disponible',
+    favorito: false,
+    lectura: form.value.tipolibro === 'Virtual' ? 'NO LEÍDO' : ''
+  }
+  libros.value.push(nuevoLibro)
   guardar()
   cerrarFormulario()
 }
@@ -186,6 +189,14 @@ function actualizarLibro() {
 }
 
 function confirmarEliminar(index) {
+  const libro = libros.value[index]
+  
+  // Validar que no se eliminen libros físicos prestados
+  if (libro.tipolibro === 'Fisico' && libro.estado === 'prestado') {
+    alert('No puedes eliminar un libro físico que está prestado. Primero debe ser devuelto.')
+    return
+  }
+  
   if (confirm('¿Estás seguro de eliminar este libro?')) {
     libros.value.splice(index, 1)
     guardar()
@@ -211,6 +222,11 @@ function limpiarFormulario() {
 </script>
 
 <style scoped>
+h2 {
+  color: #ba0707;
+  font-size: 1.7em;
+}
+
 .gestion-libros {
   padding: 20px;
 }
@@ -275,7 +291,6 @@ function limpiarFormulario() {
   color: white;
 }
 
-/* FORMULARIO */
 .formulario {
   max-width: 450px;
   display: flex;
@@ -325,7 +340,6 @@ function limpiarFormulario() {
   font-weight: bold;
 }
 
-/* BOTÓN FLOTANTE */
 .btn-flotante {
   position: fixed;
   bottom: 20px;

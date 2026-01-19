@@ -46,7 +46,6 @@
   padding: 30px 0;
 }
 
-/* Contenedor interno */
 .contenedor {
   width: 100%;
   display: flex;
@@ -54,7 +53,6 @@
   align-items: center;
 }
 
-/* Logo */
 .logo {
   color: #fff;
   font-family: 'Times New Roman', Times, sans-serif;
@@ -64,7 +62,6 @@
   margin-bottom: 40px;
 }
 
-/* Navegación */
 nav {
   width: 100%;
 }
@@ -75,7 +72,7 @@ nav a {
   padding: 15px 0;
   color: #fff;
   text-decoration: none;
-  font-size: 16px;            /* 👈 más legible */
+  font-size: 16px; 
   font-weight: bold;
   text-align: center;
   transition: background 0.3s;
@@ -86,7 +83,6 @@ nav a.router-link-active {
   background-color: rgba(255,255,255,0.2);
 }
 
-/* Cerrar sesión */
 .cerrarsesion {
   background: none;
   margin-top: 100px;

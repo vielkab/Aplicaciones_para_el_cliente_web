@@ -24,7 +24,7 @@ onMounted(() => {
 <style scoped>
 .header-admin {
   background-color: #ffffff;
-  color: rgb(199, 6, 6);
+  color: #ba0707;
   padding: 10px 30px;
   display: flex;
   justify-content: space-between;

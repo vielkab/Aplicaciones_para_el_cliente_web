@@ -1,11 +1,9 @@
 <template>
   <section class="gestion-libros-fisicos">
-    <h2>Libros Físicos - Admin</h2>
-
     <div class="contenedor-fisicos">
       <!-- Lista de libros físicos -->
       <section class="col-izquierda">
-        <h3>Libros físicos</h3>
+        <h2>Libros físicos</h2>
         <div v-if="librosFisicos.length === 0">No hay libros físicos disponibles.</div>
         <div v-for="libro in librosFisicos" :key="libro.id" class="tarjetas">
           <div class="libro-fisico">
@@ -38,7 +36,7 @@
 
       <!-- Lista de solicitudes pendientes -->
       <section class="col-derecha">
-        <h3>Solicitudes pendientes</h3>
+        <h2>Solicitudes pendientes</h2>
         <div v-if="solicitudesPendientes.length === 0">No hay solicitudes pendientes.</div>
         <div v-for="sol in solicitudesPendientes" :key="sol.id" class="solicitud-card">
           <p><b>Libro:</b> {{ obtenerLibro(sol.libroId).titulo }} (ISBN: {{ obtenerLibro(sol.libroId).isbn }})</p>
@@ -110,15 +108,17 @@ function cargarDatos() {
   solicitudesPendientes.value = solicitudes.value.filter(s => s.estado === 'pendiente')
 }
 
-function resetearDatos() {
-  if (confirm('⚠️ Esto borrará TODOS los datos del localStorage. ¿Estás seguro?')) {
+/*function resetearDatos() {
+  if (confirm(' Esto borrará TODOS los datos del localStorage. ¿Estás seguro?')) {
     localStorage.removeItem('libros')
     localStorage.removeItem('usuarios')
     localStorage.removeItem('solicitudes')
-    console.log('🗑️ Todos los datos de localStorage han sido eliminados')
-    alert('✅ Datos eliminados. Recarga la página para que aparezcan los datos iniciales.')
+    console.log('Todos los datos de localStorage han sido eliminados')
+    alert('Datos eliminados. Recarga la página para que aparezcan los datos iniciales.')
   }
-}
+}*/
+
+
 
 function obtenerUsuario(id) {
   let almacenados = JSON.parse(localStorage.getItem('usuarios'))
@@ -161,7 +161,6 @@ function diasRestantes(fechaDevolucionEsperada) {
   if (!fechaDevolucionEsperada) return '-'
   
   const ahora = new Date()
-  // Maneja tanto timestamps (números) como fechas ISO (strings)
   const fechaMs = typeof fechaDevolucionEsperada === 'number' 
     ? fechaDevolucionEsperada 
     : new Date(fechaDevolucionEsperada).getTime()
@@ -185,15 +184,13 @@ function diasRestantes(fechaDevolucionEsperada) {
 
 function aprobarSolicitud(id) {
   const s = solicitudes.value.find(s => s.id === id)
-  const libro = libros.value.find(l => l.id === s.libroId) // Búsqueda directa en array
+  const libro = libros.value.find(l => l.id === s.libroId)
   const usuario = obtenerUsuario(s.usuarioId)
   
-  // Confirmación del admin
   if (!confirm(`¿Confirmar préstamo de "${libro.titulo}" a ${usuario.nombre} por ${s.plazoDias} días?`)) {
     return
   }
-  
-  // Verificar que el libro no esté ya prestado
+
   if(libro.estado === 'prestado') {
     alert('Libro ya prestado')
     return
@@ -214,7 +211,6 @@ function aprobarSolicitud(id) {
   
   console.log('Préstamo aprobado:', { libro: libro.titulo, usuario: usuario.nombre, plazoDias: s.plazoDias, codigoRetiro: s.codigoRetiro })
   
-  // Guardar inmediatamente en localStorage
   localStorage.setItem('libros', JSON.stringify(libros.value))
   localStorage.setItem('solicitudes', JSON.stringify(solicitudes.value))
   
@@ -239,20 +235,17 @@ function abrirModalCalificacion(libroId) {
   const libro = obtenerLibro(libroId)
   if(!confirm(`Confirmar devolución de "${libro.titulo}"?`)) return
   
-  console.log('📌 Buscando solicitud para libroId:', libroId)
-  console.log('📌 Solicitudes disponibles:', solicitudes.value)
-  
   const solicitud = solicitudes.value.find(s => s.libroId === libroId && s.estado === 'aprobada')
   
   if(solicitud){
-    console.log('✅ Solicitud encontrada:', solicitud)
+    console.log('Solicitud encontrada:', solicitud)
     libroEnDevolucion.value = libroId
     // Obtener usuario actualizado del localStorage
     usuarioACalificar.value = obtenerUsuario(solicitud.usuarioId)
     mostrarModal.value = true
-    console.log('✅ Modal abierto')
+    console.log('Modal abierto')
   } else {
-    console.log('❌ No se encontró solicitud aprobada para este libro')
+    console.log('No se encontró solicitud aprobada para este libro')
     alert('Error: No se encontró una solicitud aprobada para este libro')
   }
 }
@@ -320,7 +313,7 @@ function procesarCalificacion(calificacion) {
     console.log('Total préstamos:', usuario.totalPrestamos)
   }
 
-  // Guardar todo en localStorage (sincronizar de forma definitiva)
+  // Guardar todo en localStorage
   console.log('Guardando en localStorage...')
   localStorage.setItem('libros', JSON.stringify(libros.value))
   localStorage.setItem('solicitudes', JSON.stringify(solicitudes.value))
@@ -354,20 +347,24 @@ onMounted(()=>{cargarDatos()})
 </script>
 
 <style scoped>
+h2 {
+  color: #ba0707;
+  font-size: 1.7em;
+}
 .gestion-libros-fisicos { padding:20px }
 .contenedor-fisicos { display:flex; gap:30px }
 .col-izquierda, .col-derecha { flex:1 }
 .tarjetas { display:flex; gap:10px; margin-bottom:15px; background:#f4f3ef; border-radius:8px; padding:10px }
 .libro-fisico img { width:120px; height:160px; object-fit:cover }
 .info { flex:1 }
-.info h3 { margin: 0 0 8px 0; }
+.info h3 { margin: 0 0 8px 0; color: #ba0707 }
 .info p { margin: 5px 0; font-size: 0.9em; }
 .info-prestamo { 
-  background: #fff3cd; 
+  background: #dbd9d4; 
   padding: 10px; 
   border-radius: 6px; 
   margin: 10px 0; 
-  border-left: 3px solid #ffc107;
+  border-left: 3px solid #ce0303;
 }
 .info-prestamo p { margin: 5px 0; font-size: 0.9em; }
 .dias-vencido { 
@@ -387,7 +384,7 @@ onMounted(()=>{cargarDatos()})
 .info button { 
   margin-top: 8px;
   padding: 8px 12px;
-  background: #2196F3;
+  background: #a80202;
   color: white;
   border: none;
   border-radius: 6px;

@@ -25,12 +25,12 @@
               <h4>{{ libro.titulo }}</h4>
               <p><b>Autor:</b> {{ libro.autor }}</p>
               <p><b>Categoría:</b> {{ libro.categoria }}</p>
-              <p class="estado-lectura"><b>Estado:</b> {{ libro.lectura || 'NO LEÍDO' }}</p>
+              <p class="estado-lectura"><b>Estado:</b> {{ obtenerEstado(libro.isbn) }}</p>
               <div class="acciones-lectura">
-                <button v-if="libro.lectura !== 'leido'" @click="marcarComoLeido(libro.isbn)" class="btn-accion">Marcar Leído</button>
-                <button v-if="!libro.lectura || libro.lectura === 'no-leido'" @click="iniciarLectura(libro.isbn)" class="btn-accion">Iniciar Lectura</button>
+                <button v-if="obtenerEstado(libro.isbn) !== 'leido'" @click="marcarComoLeido(libro.isbn)" class="btn-accion">Marcar Leído</button>
+                <button v-if="!obtenerEstado(libro.isbn) || obtenerEstado(libro.isbn) === 'no-leido'" @click="iniciarLectura(libro.isbn)" class="btn-accion">Iniciar Lectura</button>
                 <button @click="marcarFavorito(libro.isbn)" class="btn-accion">
-                  {{ libro.favorito ? 'Favorito' : 'Marcar Favorito' }}
+                  {{ esFavorito(libro.isbn) ? 'Favorito' : 'Marcar Favorito' }}
                 </button>
                 <button @click="descargarLibro(libro.isbn)" class="btn-descarga">Descargar</button>
               </div>
@@ -54,12 +54,12 @@
               <h4>{{ libro.titulo }}</h4>
               <p><b>Autor:</b> {{ libro.autor }}</p>
               <p><b>Categoría:</b> {{ libro.categoria }}</p>
-              <p class="estado-lectura"><b>Estado:</b> {{ libro.lectura || 'NO LEÍDO' }}</p>
+              <p class="estado-lectura"><b>Estado:</b> {{ obtenerEstado(libro.isbn) }}</p>
               <div class="acciones-lectura">
-                <button v-if="libro.lectura !== 'leido'" @click="marcarComoLeido(libro.isbn)" class="btn-accion">Marcar Leído</button>
-                <button v-if="!libro.lectura || libro.lectura === 'no-leido'" @click="iniciarLectura(libro.isbn)" class="btn-accion">Iniciar Lectura</button>
+                <button v-if="obtenerEstado(libro.isbn) !== 'leido'" @click="marcarComoLeido(libro.isbn)" class="btn-accion">Marcar Leído</button>
+                <button v-if="!obtenerEstado(libro.isbn) || obtenerEstado(libro.isbn) === 'no-leido'" @click="iniciarLectura(libro.isbn)" class="btn-accion">Iniciar Lectura</button>
                 <button @click="marcarFavorito(libro.isbn)" class="btn-accion">
-                  {{ libro.favorito ? 'Favorito' : 'Marcar Favorito' }}
+                  {{ esFavorito(libro.isbn) ? 'Favorito' : 'Marcar Favorito' }}
                 </button>
                 <button @click="descargarLibro(libro.isbn)" class="btn-descarga">Descargar</button>
               </div>
@@ -83,12 +83,12 @@
               <h4>{{ libro.titulo }}</h4>
               <p><b>Autor:</b> {{ libro.autor }}</p>
               <p><b>Categoría:</b> {{ libro.categoria }}</p>
-              <p class="estado-lectura"><b>Estado:</b> {{ libro.lectura || 'NO LEÍDO' }}</p>
+              <p class="estado-lectura"><b>Estado:</b> {{ obtenerEstado(libro.isbn) }}</p>
               <div class="acciones-lectura">
-                <button v-if="libro.lectura !== 'leido'" @click="marcarComoLeido(libro.isbn)" class="btn-accion">Marcar Leído</button>
-                <button v-if="!libro.lectura || libro.lectura === 'no-leido'" @click="iniciarLectura(libro.isbn)" class="btn-accion">Iniciar Lectura</button>
+                <button v-if="obtenerEstado(libro.isbn) !== 'leido'" @click="marcarComoLeido(libro.isbn)" class="btn-accion">Marcar Leído</button>
+                <button v-if="!obtenerEstado(libro.isbn) || obtenerEstado(libro.isbn) === 'no-leido'" @click="iniciarLectura(libro.isbn)" class="btn-accion">Iniciar Lectura</button>
                 <button @click="marcarFavorito(libro.isbn)" class="btn-accion">
-                  {{ libro.favorito ? 'Favorito' : 'Marcar Favorito' }}
+                  {{ esFavorito(libro.isbn) ? 'Favorito' : 'Marcar Favorito' }}
                 </button>
                 <button @click="descargarLibro(libro.isbn)" class="btn-descarga">Descargar</button>
               </div>
@@ -102,11 +102,16 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useAuth } from '@/composables/useAuth'
 import librosJSON from '@/assets/data/libros.json'
+
+const { getUsuario, obtenerEstadoLibro, guardarEstadoLibro } = useAuth()
+const usuario = ref(getUsuario())
 
 const libros = ref([])
 const categoriaSeleccionada = ref('todas')
 const categorias = ref([])
+const estadoLibrosUsuario = ref({})
 
 function cargarLibros() {
   const almacenados = JSON.parse(localStorage.getItem('libros'))
@@ -117,15 +122,33 @@ function cargarLibros() {
     localStorage.setItem('libros', JSON.stringify(libros.value))
   }
   generarCategorias()
-}
-
-function guardarLibros() {
-  localStorage.setItem('libros', JSON.stringify(libros.value))
+  cargarEstadoLibrosUsuario()
 }
 
 function generarCategorias() {
-  const cats = new Set(libros.value.map(l => l.categoria))
+  const cats = new Set(libros.value.filter(l => l.tipolibro === 'Virtual').map(l => l.categoria))
   categorias.value = Array.from(cats)
+}
+
+function cargarEstadoLibrosUsuario() {
+  // Cargar el estado de los libros para el usuario actual
+  if (!usuario.value) return
+  
+  estadoLibrosUsuario.value = {}
+  
+  // Obtener estado de cada libro
+  libros.value.forEach(libro => {
+    const estado = obtenerEstadoLibro(libro.isbn)
+    estadoLibrosUsuario.value[libro.isbn] = { ...estado }
+  })
+}
+
+function obtenerEstado(isbn) {
+  return estadoLibrosUsuario.value[isbn]?.lectura || 'NO LEÍDO'
+}
+
+function esFavorito(isbn) {
+  return estadoLibrosUsuario.value[isbn]?.favorito || false
 }
 
 // Computed para filtrar libros
@@ -134,32 +157,56 @@ const librosFiltrados = computed(() =>
                .filter(l => l.tipolibro === 'Virtual')
 )
 
-const librosLeyendo = computed(() => librosFiltrados.value.filter(l => l.lectura === 'leyendo'))
-const librosLeidos = computed(() => librosFiltrados.value.filter(l => l.lectura === 'leido'))
-const librosFavoritos = computed(() => librosFiltrados.value.filter(l => l.favorito))
+const librosLeyendo = computed(() => librosFiltrados.value.filter(l => obtenerEstado(l.isbn) === 'leyendo'))
+const librosLeidos = computed(() => librosFiltrados.value.filter(l => obtenerEstado(l.isbn) === 'leido'))
+const librosFavoritos = computed(() => librosFiltrados.value.filter(l => esFavorito(l.isbn)))
 
 function iniciarLectura(isbn) {
   const libro = libros.value.find(l => l.isbn === isbn)
   if (!libro) return
-  libro.lectura = 'leyendo'
-  guardarLibros()
+  
+  const estadoActual = estadoLibrosUsuario.value[isbn] || { favorito: false, lectura: 'NO LEÍDO' }
+  const nuevoEstado = { ...estadoActual, lectura: 'leyendo' }
+  
+  // Guardar en localStorage por usuario
+  guardarEstadoLibro(isbn, nuevoEstado)
+  
+  // Actualizar estado local reactivo
+  estadoLibrosUsuario.value[isbn] = nuevoEstado
+  
   alert(`Iniciaste la lectura de: ${libro.titulo}`)
 }
 
 function marcarComoLeido(isbn) {
   const libro = libros.value.find(l => l.isbn === isbn)
   if (!libro) return
-  libro.lectura = 'leido'
-  guardarLibros()
+  
+  const estadoActual = estadoLibrosUsuario.value[isbn] || { favorito: false, lectura: 'NO LEÍDO' }
+  const nuevoEstado = { ...estadoActual, lectura: 'leido' }
+  
+  // Guardar en localStorage por usuario
+  guardarEstadoLibro(isbn, nuevoEstado)
+  
+  // Actualizar estado local reactivo
+  estadoLibrosUsuario.value[isbn] = nuevoEstado
+  
   alert(`¡Felicidades! Terminaste de leer el libro: ${libro.titulo}.`)
 }
 
 function marcarFavorito(isbn) {
   const libro = libros.value.find(l => l.isbn === isbn)
   if (!libro) return
-  libro.favorito = !libro.favorito
-  guardarLibros()
-  alert(`Libro ${libro.titulo} ${libro.favorito ? 'añadido a' : 'eliminado de'} Favoritos.`)
+  
+  const estadoActual = estadoLibrosUsuario.value[isbn] || { favorito: false, lectura: 'NO LEÍDO' }
+  const nuevoEstado = { ...estadoActual, favorito: !estadoActual.favorito }
+  
+  // Guardar en localStorage por usuario
+  guardarEstadoLibro(isbn, nuevoEstado)
+  
+  // Actualizar estado local reactivo
+  estadoLibrosUsuario.value[isbn] = nuevoEstado
+  
+  alert(`Libro ${libro.titulo} ${nuevoEstado.favorito ? 'añadido a' : 'eliminado de'} Favoritos.`)
 }
 
 function descargarLibro(isbn) {
@@ -173,6 +220,7 @@ function mostrarMisLecturas() {
 }
 
 onMounted(() => {
+  usuario.value = getUsuario()
   cargarLibros()
 })
 </script>
@@ -258,9 +306,9 @@ h2 {
 }
 .panel-filtro {
   display: flex;
-  align-items: center;      /* Centra verticalmente el select y el botón */
-  gap: 10px;                /* Espacio horizontal entre select y botón */
-  margin-bottom: 20px;      /* Espacio debajo del panel */
+  align-items: center; 
+  gap: 10px; 
+  margin-bottom: 20px; 
 }
 
 .panel-filtro select {
@@ -284,7 +332,4 @@ h2 {
 .panel-filtro button:hover {
   background-color: #a20404;
 }
-
-
-/* puedes subir los cabios al repositorio */
 </style>

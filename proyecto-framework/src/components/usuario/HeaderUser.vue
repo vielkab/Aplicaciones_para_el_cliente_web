@@ -38,7 +38,7 @@ onUnmounted(() => {
 <style scoped>
 .header-usuario {
   background-color: #ffffff;
-  color: rgb(168, 5, 5);
+  color: #ba0707;;
   margin-top: 0px;
   padding: 10px 35px;
   display: flex;

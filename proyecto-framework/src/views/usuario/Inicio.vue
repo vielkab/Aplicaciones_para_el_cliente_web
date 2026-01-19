@@ -16,7 +16,7 @@
               <h3>{{ libro.titulo }}</h3>
               <p><strong>Autor:</strong> {{ libro.autor }}</p>
               <p><strong>Tipo de Libro:</strong> {{ libro.tipolibro }}</p>
-              <p class="estado-lectura"><strong>Estado:</strong> <span>{{ libro.lectura || 'NO LEÍDO' }}</span></p>
+              <p class="estado-lectura"><strong>Estado:</strong> <span>{{ obtenerEstado(libro.isbn) }}</span></p>
               <div v-if="libro.usuarioPrestamista && libro.estado === 'prestado'" class="info-prestamo-usuario">
                 <p><strong>Disponible en:</strong> {{ diasRestantes(libro.fechaDevolucionEsperada) }}</p>
               </div>
@@ -24,10 +24,10 @@
             <div class="botonlibro" v-if="libro.tipolibro === 'Virtual'">
               <button 
                 @click="marcarFavorito(libro.isbn)"
-                :style="{ backgroundColor: libro.favorito ? '#dceeaeff' : '#ffffffff', border: 'none' }">
+                :style="{ backgroundColor: esFavorito(libro.isbn) ? '#dceeaeff' : '#ffffffff', border: 'none' }">
                 ⭐
               </button>
-              <button v-if="!libro.lectura || libro.lectura === 'NO LEÍDO'" @click="marcarLeido(libro.isbn)">Leer</button>
+              <button v-if="!obtenerEstado(libro.isbn) || obtenerEstado(libro.isbn) === 'NO LEÍDO'" @click="marcarLeido(libro.isbn)">Leer</button>
               <button @click="descargarLibro(libro.titulo)">Descargar</button>
             </div>
           </div>
@@ -42,11 +42,12 @@ import { ref, computed, onMounted } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import librosJSON from '@/assets/data/libros.json'
 
-const { getUsuario } = useAuth()
+const { getUsuario, obtenerEstadoLibro, guardarEstadoLibro, verificarYMarcarLibrosVencidos } = useAuth()
 const usuario = ref(getUsuario())
 
-// Estado reactivo de los libros
 const libros = ref([])
+const estadoLibrosUsuario = ref({})
+const alertasVencimiento = ref([])
 
 // Filtrar solo libros virtuales
 const librosVirtuales = computed(() => {
@@ -58,7 +59,6 @@ function diasRestantes(fechaDevolucionEsperada) {
   if (!fechaDevolucionEsperada) return '-'
   
   const ahora = new Date()
-  // Maneja tanto timestamps (números) como fechas ISO (strings)
   const fechaMs = typeof fechaDevolucionEsperada === 'number' 
     ? fechaDevolucionEsperada 
     : new Date(fechaDevolucionEsperada).getTime()
@@ -90,7 +90,6 @@ const categorias = computed(() => {
   return grouped
 })
 
-// Funciones
 function cargarLibros() {
   try {
     const almacenados = JSON.parse(localStorage.getItem('libros') || '[]')
@@ -106,23 +105,66 @@ function cargarLibros() {
   }
 }
 
-function guardarLibros() {
-  localStorage.setItem('libros', JSON.stringify(libros.value))
+function cargarEstadoLibrosUsuario() {
+  if (!usuario.value) return
+  
+  estadoLibrosUsuario.value = {}
+  
+  // Obtener estado de cada libro
+  librosVirtuales.value.forEach(libro => {
+    const estado = obtenerEstadoLibro(libro.isbn)
+    estadoLibrosUsuario.value[libro.isbn] = { ...estado }
+  })
+}
+
+function obtenerEstado(isbn) {
+  return estadoLibrosUsuario.value[isbn]?.lectura || 'NO LEÍDO'
+}
+
+function esFavorito(isbn) {
+  return estadoLibrosUsuario.value[isbn]?.favorito || false
+}
+
+function verificarLibrosVencidos() {
+  const alertas = verificarYMarcarLibrosVencidos()
+  if (alertas.length > 0) {
+    alertasVencimiento.value = alertas
+    alertas.forEach(alerta => {
+      alert(alerta.mensaje)
+    })
+    // Recargar libros para mostrar los cambios
+    cargarLibros()
+  }
 }
 
 function marcarFavorito(isbn) {
   const libro = libros.value.find(l => l.isbn === isbn)
   if (!libro) return
-  libro.favorito = !libro.favorito
-  guardarLibros()
-  alert(`Libro ${libro.titulo} ${libro.favorito ? 'añadido a' : 'eliminado de'} Favoritos.`)
+  
+  const estadoActual = estadoLibrosUsuario.value[isbn] || { favorito: false, lectura: 'NO LEÍDO' }
+  const nuevoEstado = { ...estadoActual, favorito: !estadoActual.favorito }
+  
+  // Guardar en localStorage por usuario
+  guardarEstadoLibro(isbn, nuevoEstado)
+  
+  // Actualizar estado local reactivo
+  estadoLibrosUsuario.value[isbn] = nuevoEstado
+  
+  alert(`Libro ${libro.titulo} ${nuevoEstado.favorito ? 'añadido a' : 'eliminado de'} Favoritos.`)
 }
 
 function marcarLeido(isbn) {
   const libro = libros.value.find(l => l.isbn === isbn)
   if (!libro) return
-  libro.lectura = 'leyendo'
-  guardarLibros()
+  
+  const estadoActual = estadoLibrosUsuario.value[isbn] || { favorito: false, lectura: 'NO LEÍDO' }
+  const nuevoEstado = { ...estadoActual, lectura: 'leyendo' }
+  
+  // Guardar en localStorage por usuario
+  guardarEstadoLibro(isbn, nuevoEstado)
+  
+  estadoLibrosUsuario.value[isbn] = nuevoEstado
+  
   alert(`El libro ${libro.titulo} ha sido marcado como 'leyendo'.`)
 }
 
@@ -132,7 +174,11 @@ function descargarLibro(titulo) {
 
 // Inicializar
 onMounted(() => {
+  usuario.value = getUsuario()
   cargarLibros()
+  cargarEstadoLibrosUsuario()
+  // Verificar si hay libros vencidos
+  verificarLibrosVencidos()
 })
 </script>
 
@@ -195,3 +241,4 @@ onMounted(() => {
   font-size: 0.85em;
 }
 </style>
+
